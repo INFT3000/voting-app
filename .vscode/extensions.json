@@ -3,6 +3,9 @@
         "dbaeumer.vscode-eslint",
         "github.vscode-pull-request-github",
         "golang.go",
-        "bradlc.vscode-tailwindcss"
+        "bradlc.vscode-tailwindcss",
+    ],
+    "unwantedRecommendations": [
+        "esbenp.prettier-vscode"
     ]
 }
