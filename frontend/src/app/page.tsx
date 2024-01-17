@@ -1,11 +1,28 @@
 import React from 'react'
 import Navbar from './components/Navbar'
+import Button from './components/Button'
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
+    <main className="flex min-h-screen flex-col items-center justify-center">
       <Navbar />
-      <section className='flex justify-center items-center h'></section>
+      <section className='flex justify-center items-center h-[100vh] flex-row'>
+        <div className='headerCont w-[50%]'>
+          <h1 className='text-6xl font-bold text-left text-white'>Create a Poll <br></br><span className='text-primaryBlue'>in seconds</span>.</h1>
+          <p className='text-left text-primaryLight my-[20px]' >
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec urna ex, 
+            porttitor egestas vestibulum ut, tincidunt pellentesque erat. In blandit
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </p>
+          <div className='btnCont flex flex-row w-[325px] justify-between'>
+            <Button text="Signup" buttonType="anchor" styleType="primary" onClick={null} href={""} />
+            <Button text="Login" buttonType="anchor" styleType="secondary" onClick={null} href={""} />
+          </div>
+        </div>
+        <div className='pollCreationCont w-[50%]'>
+
+        </div>
+      </section>
     </main>
   )
 }
