@@ -19,7 +19,7 @@ export default function Button({ text, onClick, buttonType, styleType, href}) {
               
         default:
             return (
-                <p className="text-white font-bold">Invalid button type property. Please use "button" or "anchor"</p>
+                <p className="text-white font-bold">Invalid button type property. Please use &quot;button&quot; or &quot;anchor&quot;</p>
             )
             
     }
