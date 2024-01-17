@@ -3,3 +3,6 @@ develop:
 
 start-backend:
 	cd backend && go run main.go
+
+lint:
+	cd frontend && pnpm lint
