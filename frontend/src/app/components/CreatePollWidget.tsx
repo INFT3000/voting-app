@@ -8,20 +8,16 @@ export default function CreatePollWidget() {
     const [options, setOptions] = useState(["", ""]);
 
     const handleAddOption = () => {
-        // Add a new option with an empty string to the options array
         setOptions([...options, ""]);
     };
     
-    // Function to handle change in any option input
     const handleOptionChange = (value, index) => {
-        // Update the specific option value in the options array
         const newOptions = [...options];
         newOptions[index] = value;
         setOptions(newOptions);
     };
 
     const handleOptionRemove = (index) => {
-        // Remove the specific option from the options array
         const newOptions = [...options];
         newOptions.splice(index, 1);
         setOptions(newOptions);
@@ -41,12 +37,13 @@ export default function CreatePollWidget() {
                             {options.map((option, index) => (
                                 <div
                                     key={index}
+                                    className="flex items-center bg-tetraDark rounded-lg p-[10px] mb-[10px] h-[40px]"
                                 >
                                 <input
                                     placeholder={`Option ${index + 1}`}
                                     value={option}
                                     onChange={(e) => handleOptionChange(e.target.value, index)}
-                                    className="bg-tetraDark rounded-lg p-[10px] mb-[10px] outline-none focus:border-primaryBlue focus:border-[1px] text-white"
+                                    className=" bg-tetraDark outline-none text-white grow"
                                 />
                                 {/*Only show the remove button if there are more than 2 options*/}
                                 <When condition={index > 1}>
@@ -55,7 +52,7 @@ export default function CreatePollWidget() {
                                         buttonType="button"
                                         theme="secondary"
                                         onClick={() => handleOptionRemove(index)}
-                                        className="w-[10%] h-[40px] text-[14px] px-[5px] hover:bg-primaryBlue hover:text-primaryDark transition-all"
+                                        className="w-[40px] h-[40px] text-[14px] px-[0] hover:bg-primaryBlue hover:text-primaryDark transition-all ms-2"
                                     />
                                 </When>
                                 </div>
