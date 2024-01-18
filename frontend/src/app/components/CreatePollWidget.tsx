@@ -42,7 +42,7 @@ export default function CreatePollWidget() {
                             <Button
                                 text="Add Option"
                                 buttonType="button"
-                                styleType="secondary"
+                                theme="secondary"
                                 onClick={handleAddOption}
                                 className="w-[25%] h-[40px] text-[14px] px-[5px] hover:bg-primaryBlue hover:text-primaryDark transition-all"
                             />
