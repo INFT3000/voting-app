@@ -1,6 +1,7 @@
 import React from 'react'
 import Navbar from './components/Navbar'
 import Button from './components/Button'
+import CreatePollWidget from './components/CreatePollWidget'
 
 export default function Home() {
   return (
@@ -19,8 +20,8 @@ export default function Home() {
             <Button text="Login" buttonType="anchor" styleType="secondary" href={""} />
           </div>
         </div>
-        <div className='pollCreationCont w-[50%]'>
-
+        <div className='pollCreationCont w-[50%] flex justify-center items-center'>
+          <CreatePollWidget />
         </div>
       </section>
     </main>
