@@ -48,22 +48,18 @@ export default function CreatePollWidget() {
                                 {/*Only show the remove button if there are more than 2 options*/}
                                 <When condition={index > 1}>
                                     <Button
-                                        text="x"
-                                        buttonType="button"
                                         theme="secondary"
                                         onClick={() => handleOptionRemove(index)}
                                         className="w-[40px] h-[40px] text-[14px] px-[0] hover:bg-primaryBlue hover:text-primaryDark transition-all ms-2"
-                                    />
+                                    >x</Button>
                                 </When>
                                 </div>
                             ))}
                             <Button
-                                text="Add Option"
-                                buttonType="button"
                                 theme="secondary"
                                 onClick={handleAddOption}
                                 className="w-[25%] h-[40px] text-[14px] px-[5px] hover:bg-primaryBlue hover:text-primaryDark transition-all"
-                            />
+                            >Add Option</Button>
                         </fieldset>
                     </div>
 

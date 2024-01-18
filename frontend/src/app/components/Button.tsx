@@ -1,33 +1,29 @@
-// import stuff from react-if
-'use client';
-import React from 'react'
-import { If, Then, Else } from 'react-if';
-type ButtonProps = {
-    text: string
-    onClick?: () => void
-    buttonType: 'button' | 'anchor'
-    theme?: 'primary' | 'secondary'
-    href?: string
-    className?: string
-    isSubmit?: boolean
+import React from 'react';
+
+type ButtonTheme = 'primary' | 'secondary';
+
+type ButtonProps = React.ComponentPropsWithoutRef<'button'> & {
+    theme?: ButtonTheme;
+}
+
+const themes = {
+    primary: 'bg-primaryBlue rounded-lg text-primaryDark font-medium px-[50px] py-[7px]',
+    secondary: 'bg-transparent border-primaryBlue border-2 rounded-lg text-white font-medium px-[50px] py-[7px]',
+}
+
+const getButtonStyle = (theme?: ButtonTheme) => {
+    if (theme) {
+        return themes[theme];
     }
-    
-export default function Button({ text, onClick, buttonType, theme = 'primary', href, className, isSubmit}: ButtonProps) {
+    return ''
+};
 
-    const style = theme === 'primary'
-        ? 'bg-primaryBlue rounded-lg text-primaryDark font-medium px-[50px] py-[7px]'
-        : 'bg-transparent border-primaryBlue border-2 rounded-lg text-white font-medium px-[50px] py-[7px]'
+export default function Button(props: ButtonProps) {
 
+    const style = getButtonStyle(props.theme)
     return (
-        <If condition={buttonType === 'button'}>
-            <Then>
-                <button onClick={onClick} className={`${style} ${className}`} type={isSubmit ? "submit" : "button"}>
-                    {text}
-                </button>
-            </Then>
-            <Else>
-                <a href={href} className={`${style} ${className}`}>{text}</a>
-            </Else>
-        </If>
+        <button {...props} className={`${style} ${props.className}`} type={props.type || 'button'}>
+            {props.children}
+        </button>
     )
 }
