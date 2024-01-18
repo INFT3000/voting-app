@@ -16,8 +16,8 @@ export default function Home() {
             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
           </p>
           <div className='btnCont flex flex-row w-[325px] justify-between'>
-            <Button text="Signup" buttonType="anchor" styleType="primary" href={""} />
-            <Button text="Login" buttonType="anchor" styleType="secondary" href={""} />
+            <Button text="Signup" buttonType="anchor" href={""} />
+            <Button text="Login" buttonType="anchor" theme="secondary" href={""} />
           </div>
         </div>
         <div className='pollCreationCont w-[50%] flex justify-center items-center'>
