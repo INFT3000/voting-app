@@ -1,14 +1,15 @@
 import React from 'react';
 
-type ButtonTheme = 'primary' | 'secondary';
+export type ButtonTheme = 'primary' | 'secondary' | 'ghost';
 
-type ButtonProps = React.ComponentPropsWithoutRef<'button'> & {
+export type ButtonProps = React.ComponentPropsWithoutRef<'button'> & {
     theme?: ButtonTheme;
 }
 
 const themes = {
     primary: 'bg-primaryBlue rounded-lg text-primaryDark font-medium px-[50px] py-[7px]',
     secondary: 'bg-transparent border-primaryBlue border-2 rounded-lg text-white font-medium px-[50px] py-[7px]',
+    ghost: 'bg-transparent text-primaryBlue font-medium px-[50px] py-[7px]'
 }
 
 const getButtonStyle = (theme?: ButtonTheme) => {
@@ -18,12 +19,14 @@ const getButtonStyle = (theme?: ButtonTheme) => {
     return ''
 };
 
-export default function Button(props: ButtonProps) {
+const Button: React.FC<ButtonProps> = ({theme, className, children, type, ...props}) => {
 
-    const style = getButtonStyle(props.theme)
+    const style = getButtonStyle(theme)
     return (
-        <button {...props} className={`${style} ${props.className}`} type={props.type || 'button'}>
-            {props.children}
+        <button {...props} className={`${style} ${className}`} type={type || 'button'}>
+            {children}
         </button>
     )
 }
+
+export default Button;

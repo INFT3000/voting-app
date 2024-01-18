@@ -4,6 +4,18 @@ import PollContainer from "./PollContainer"
 import Button from "./Button"
 import { useState } from "react";
 import { When } from "react-if";
+import Image from "next/image";
+import IconButton from "./IconButton";
+
+const ImageIcon = () => (
+    <Image
+        src="/icons/x.svg"
+        alt="remove"
+        width={18}
+        height={18}
+    />
+);
+
 export default function CreatePollWidget() {
     const [options, setOptions] = useState(["", ""]);
 
@@ -47,11 +59,13 @@ export default function CreatePollWidget() {
                                 />
                                 {/*Only show the remove button if there are more than 2 options*/}
                                 <When condition={index > 1}>
-                                    <Button
-                                        theme="secondary"
+                                    <IconButton
+                                        theme="ghost"
+                                        type='button'
+                                        icon={<ImageIcon />}
                                         onClick={() => handleOptionRemove(index)}
-                                        className="w-[40px] h-[40px] text-[14px] px-[0] hover:bg-primaryBlue hover:text-primaryDark transition-all ms-2"
-                                    >x</Button>
+                                        className="hover:opacity-45 transition-opacity ms-2"
+                                    />
                                 </When>
                                 </div>
                             ))}
@@ -62,7 +76,6 @@ export default function CreatePollWidget() {
                             >Add Option</Button>
                         </fieldset>
                     </div>
-
                 </div>
             </form>
         </PollContainer>
