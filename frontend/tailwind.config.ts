@@ -13,12 +13,15 @@ const config: Config = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      boxShadow: {
+        'blueTop': '0px -4px 0px 0px #8BB9FE;',
+      }
     },
     colors: {
       'primaryBlue': '#8BB9FE',
       'primaryDark': '#11151B',
       'secondaryDark': '#151A21',
-      'tetraDark': '#0E1F39', // Not sure if this is actually used in design yet
+      'tetraDark': '#252B35', 
       'quadraDark': '#1D304B', // Not sure if this is actually used in design yet
       'primaryLight': '#B4BFD2',
       'secondaryLight': '#737276',
