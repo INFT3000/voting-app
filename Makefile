@@ -6,3 +6,6 @@ start-backend:
 
 lint:
 	cd frontend && pnpm lint
+
+test:
+	echo test
