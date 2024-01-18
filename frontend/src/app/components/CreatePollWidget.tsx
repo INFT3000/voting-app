@@ -83,7 +83,7 @@ export default function CreatePollWidget() {
                                 type='button'
                                 icon={<AddIcon />}
                                 onClick={handleAddOption}
-                                className="text-[14px] justify-center text-grey px-[10px] py-[5px] w-[128px]"
+                                className="text-[14px] justify-center text-grey px-[10px] py-[5px] max-w-[128px]"
                             >Add Option</IconButton>
                         </fieldset>
                     </div>
