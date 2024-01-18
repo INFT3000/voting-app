@@ -9,7 +9,7 @@ export type ButtonProps = React.ComponentPropsWithoutRef<'button'> & {
 const themes = {
     primary: 'bg-primaryBlue rounded-lg text-primaryDark font-medium px-[50px] py-[7px]',
     secondary: 'bg-transparent border-primaryBlue border-2 rounded-lg text-white font-medium px-[50px] py-[7px]',
-    ghost: 'bg-transparent text-primaryBlue font-medium px-[50px] py-[7px]'
+    ghost: 'bg-transparent text-primaryBlue font-medium'
 }
 
 const getButtonStyle = (theme?: ButtonTheme) => {

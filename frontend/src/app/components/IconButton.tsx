@@ -1,4 +1,4 @@
-import { ButtonProps } from "./Button";
+import Button, { ButtonProps } from "./Button";
 
 type IconButtonProps = ButtonProps & {
     icon: React.ReactNode;
@@ -9,10 +9,10 @@ type IconButtonProps = ButtonProps & {
 
 const IconButton: React.FC<IconButtonProps> = ({ children, icon, iconPosition = 'left', className, ...props }) => {
     return (
-        <button {...props} className={`flex items-center ${iconPosition === 'left' ? 'flex-row' : 'flex-row-reverse'} ${className}`}>
+        <Button {...props} className={`flex items-center gap-[6px] ${iconPosition === 'left' ? 'flex-row' : 'flex-row-reverse'} ${className}`}>
             {icon}
             {children}
-        </button>
+        </Button>
     )
 };
 

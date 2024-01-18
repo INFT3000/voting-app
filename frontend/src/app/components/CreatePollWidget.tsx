@@ -64,7 +64,7 @@ export default function CreatePollWidget() {
                                     placeholder={`Option ${index + 1}`}
                                     value={option}
                                     onChange={(e) => handleOptionChange(e.target.value, index)}
-                                    className=" bg-tetraDark outline-none text-white grow"
+                                    className=" bg-tetraDark text-white grow"
                                 />
                                 {/*Only show the remove button if there are more than 2 options*/}
                                 <When condition={index > 1}>
@@ -73,16 +73,17 @@ export default function CreatePollWidget() {
                                         type='button'
                                         icon={<RemoveIcon />}
                                         onClick={() => handleOptionRemove(index)}
-                                        className="hover:opacity-45 transition-opacity ms-2"
+                                        className="hover:opacity-45 transition-opacity"
                                     />
                                 </When>
                                 </div>
                             ))}
                             <IconButton
                                 theme="secondary"
+                                type='button'
                                 icon={<AddIcon />}
                                 onClick={handleAddOption}
-                                className="w-[25%] h-[40px] text-[14px] px-[5px] hover:bg-primaryBlue hover:text-primaryDark transition-all"
+                                className="text-[14px] justify-center text-grey px-[10px] py-[5px] w-[128px]"
                             >Add Option</IconButton>
                         </fieldset>
                     </div>
