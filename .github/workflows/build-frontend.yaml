@@ -4,7 +4,7 @@ on:
     push:
         paths:
             - "frontend/**"
-            - ".github/workflows/lint.yaml"
+            - ".github/workflows/build-frontend.yaml"
 
 jobs:
   lint:
@@ -28,4 +28,8 @@ jobs:
 
     - name: Run Next.js Linter
       run: pnpm lint
+      working-directory: ./frontend
+
+    - name: Build Next.js app
+      run: pnpm build
       working-directory: ./frontend
