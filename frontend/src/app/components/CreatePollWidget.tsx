@@ -4,6 +4,27 @@ import PollContainer from "./PollContainer"
 import Button from "./Button"
 import { useState } from "react";
 import { When } from "react-if";
+import Image from "next/image";
+import IconButton from "./IconButton";
+
+const RemoveIcon = () => (
+    <Image
+        src="/icons/x.svg"
+        alt="remove"
+        width={18}
+        height={18}
+    />
+);
+
+const AddIcon = () => (
+    <Image
+        src="/icons/plus.svg"
+        alt="add"
+        width={16}
+        height={20}
+    />
+);
+
 export default function CreatePollWidget() {
     const [options, setOptions] = useState(["", ""]);
 
@@ -43,30 +64,29 @@ export default function CreatePollWidget() {
                                     placeholder={`Option ${index + 1}`}
                                     value={option}
                                     onChange={(e) => handleOptionChange(e.target.value, index)}
-                                    className=" bg-tetraDark outline-none text-white grow"
+                                    className=" bg-tetraDark text-white grow"
                                 />
                                 {/*Only show the remove button if there are more than 2 options*/}
                                 <When condition={index > 1}>
-                                    <Button
-                                        text="x"
-                                        buttonType="button"
-                                        theme="secondary"
+                                    <IconButton
+                                        theme="ghost"
+                                        type='button'
+                                        icon={<RemoveIcon />}
                                         onClick={() => handleOptionRemove(index)}
-                                        className="w-[40px] h-[40px] text-[14px] px-[0] hover:bg-primaryBlue hover:text-primaryDark transition-all ms-2"
+                                        className="hover:opacity-45 transition-opacity"
                                     />
                                 </When>
                                 </div>
                             ))}
-                            <Button
-                                text="Add Option"
-                                buttonType="button"
+                            <IconButton
                                 theme="secondary"
+                                type='button'
+                                icon={<AddIcon />}
                                 onClick={handleAddOption}
-                                className="w-[25%] h-[40px] text-[14px] px-[5px] hover:bg-primaryBlue hover:text-primaryDark transition-all"
-                            />
+                                className="text-[14px] justify-center text-grey px-[10px] py-[5px] max-w-[128px]"
+                            >Add Option</IconButton>
                         </fieldset>
                     </div>
-
                 </div>
             </form>
         </PollContainer>

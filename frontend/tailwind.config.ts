@@ -25,8 +25,8 @@ const config: Config = {
       'quadraDark': '#1D304B', // Not sure if this is actually used in design yet
       'primaryLight': '#B4BFD2',
       'secondaryLight': '#737276',
+      'grey': '#B4BFD2',
       'white': '#FFFFFF',
-      
     },
   },
   plugins: [],
