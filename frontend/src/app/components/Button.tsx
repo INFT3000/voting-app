@@ -1,22 +1,32 @@
-// import stuff from react-if
-'use client';
-import React from 'react'
+import React from 'react';
 import { If, Then, Else } from 'react-if';
-type ButtonProps = {
-    text: string
-    onClick?: () => void
-    buttonType: 'button' | 'anchor'
-    theme?: 'primary' | 'secondary'
-    href?: string
-    className?: string
-    isSubmit?: boolean
-    }
-    
-export default function Button({ text, onClick, buttonType, theme = 'primary', href, className, isSubmit}: ButtonProps) {
 
-    const style = theme === 'primary'
-        ? 'bg-primaryBlue rounded-lg text-primaryDark font-medium px-[50px] py-[7px]'
-        : 'bg-transparent border-primaryBlue border-2 rounded-lg text-white font-medium px-[50px] py-[7px]'
+type ButtonProps = {
+    text: string;
+    onClick?: React.MouseEventHandler<HTMLButtonElement>; // Updated type
+    buttonType: 'button' | 'anchor';
+    theme?: 'primary' | 'secondary' | 'ghost';
+    href?: string;
+    className?: string;
+    isSubmit?: boolean;
+};
+
+export default function Button({ text, onClick, buttonType, theme = 'primary', href, className, isSubmit }: ButtonProps) {
+    const getStyle = (theme: 'primary' | 'secondary' | 'ghost') => {
+        switch (theme) {
+            case 'primary':
+                return 'bg-primaryBlue rounded-lg text-primaryDark font-medium px-[50px] py-[7px]';
+            case 'secondary':
+                return 'bg-transparent border-primaryBlue border-2 rounded-lg text-white font-medium px-[50px] py-[7px]';
+            case 'ghost':
+                return 'bg-transparent rounded-lg text-primaryLight font-medium border-none hover:bg-transparent hover:text-primaryBlue transition-all';
+            default:
+                return ''; 
+        }
+    };
+
+    const style = getStyle(theme);
+
 
     return (
         <If condition={buttonType === 'button'}>
@@ -29,5 +39,5 @@ export default function Button({ text, onClick, buttonType, theme = 'primary', h
                 <a href={href} className={`${style} ${className}`}>{text}</a>
             </Else>
         </If>
-    )
+    );
 }
