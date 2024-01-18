@@ -7,12 +7,21 @@ import { When } from "react-if";
 import Image from "next/image";
 import IconButton from "./IconButton";
 
-const ImageIcon = () => (
+const RemoveIcon = () => (
     <Image
         src="/icons/x.svg"
         alt="remove"
         width={18}
         height={18}
+    />
+);
+
+const AddIcon = () => (
+    <Image
+        src="/icons/plus.svg"
+        alt="add"
+        width={16}
+        height={20}
     />
 );
 
@@ -62,18 +71,19 @@ export default function CreatePollWidget() {
                                     <IconButton
                                         theme="ghost"
                                         type='button'
-                                        icon={<ImageIcon />}
+                                        icon={<RemoveIcon />}
                                         onClick={() => handleOptionRemove(index)}
                                         className="hover:opacity-45 transition-opacity ms-2"
                                     />
                                 </When>
                                 </div>
                             ))}
-                            <Button
+                            <IconButton
                                 theme="secondary"
+                                icon={<AddIcon />}
                                 onClick={handleAddOption}
                                 className="w-[25%] h-[40px] text-[14px] px-[5px] hover:bg-primaryBlue hover:text-primaryDark transition-all"
-                            >Add Option</Button>
+                            >Add Option</IconButton>
                         </fieldset>
                     </div>
                 </div>
