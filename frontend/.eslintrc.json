@@ -5,14 +5,17 @@
     "plugin:tailwindcss/recommended"
   ],
   "parserOptions": {
-    "project": ["./frontend/tsconfig.json"]
+    "project": ["./tsconfig.json"]
   },
   "rules": {
     "jsx-quotes": ["error", "prefer-double"],
+    "react/prop-types": "off",
     "tailwindcss/no-custom-classname": "off",
     "tailwindcss/no-contradicting-classname": "error",
     "tailwindcss/classnames-order": "error",
     "@typescript-eslint/lines-between-class-members": "off",
+    "filename-export/match-named-export": "off",
+    "filename-export/match-default-export": "off",
     "import/no-extraneous-dependencies": [
       "error",
       {
