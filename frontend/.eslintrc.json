@@ -9,6 +9,9 @@
   },
   "rules": {
     "jsx-quotes": ["error", "prefer-double"],
+    "tailwindcss/no-custom-classname": "off",
+    "tailwindcss/no-contradicting-classname": "error",
+    "tailwindcss/classnames-order": "error",
     "@typescript-eslint/lines-between-class-members": "off",
     "import/no-extraneous-dependencies": [
       "error",
