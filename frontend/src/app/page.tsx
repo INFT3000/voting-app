@@ -2,6 +2,7 @@ import React from 'react'
 import Navbar from './components/Navbar'
 import Button from './components/Button'
 import CreatePollWidget from './components/CreatePollWidget'
+import Link from 'next/link'
 
 export default function Home() {
   return (
@@ -15,9 +16,13 @@ export default function Home() {
             porttitor egestas vestibulum ut, tincidunt pellentesque erat. In blandit
             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
           </p>
-          <div className='btnCont flex flex-row w-[325px] justify-between'>
-            <Button text="Signup" buttonType="anchor" href={""} />
-            <Button text="Login" buttonType="anchor" theme="secondary" href={""} />
+          <div className='btnCont flex flex-row w-[325px] justify-between' >
+            <Button theme='primary'>
+              <Link href='/signup'>Login</Link>
+            </Button>
+            <Button theme='secondary'>
+            <Link href='/signup'>Signup</Link>
+            </Button>
           </div>
         </div>
         <div className='pollCreationCont w-[50%] flex justify-center items-center'>

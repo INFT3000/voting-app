@@ -4,10 +4,22 @@
 
 *{
   box-sizing: border-box;
+  margin: 0;
 }
 
 body {
   background-color: #11151B;
   padding-left: 300px;
   padding-right: 300px;
+  color: #FFFFFF;
+}
+
+.primary-link {
+  background-color: transparent;
+  border-color: #8BB9FE;
+  border-width: 2px;
+  border-radius: 0.5rem;
+  color: var(--white);
+  font-weight: medium;
+  padding: 50px 7px;
 }

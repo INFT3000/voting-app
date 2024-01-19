@@ -5,6 +5,27 @@ import Button from "./Button"
 import { useState } from "react";
 import { When } from "react-if";
 import ToggleSwitch from "./ToggleSwitch";
+import Image from "next/image";
+import IconButton from "./IconButton";
+
+const RemoveIcon = () => (
+    <Image
+        src="/icons/x.svg"
+        alt="remove"
+        width={18}
+        height={18}
+    />
+);
+
+const AddIcon = () => (
+    <Image
+        src="/icons/plus.svg"
+        alt="add"
+        width={16}
+        height={20}
+    />
+);
+
 export default function CreatePollWidget() {
     const [options, setOptions] = useState(["", ""]);
 
@@ -51,30 +72,30 @@ export default function CreatePollWidget() {
                                     placeholder={`Option ${index + 1}`}
                                     value={option}
                                     onChange={(e) => handleOptionChange(e.target.value, index)}
-                                    className=" bg-tetraDark outline-none text-white grow"
+                                    className=" bg-tetraDark text-white grow"
                                 />
                                 {/*Only show the remove button if there are more than 2 options*/}
                                 <When condition={index > 1}>
-                                    <Button
-                                        text="x"
-                                        buttonType="button"
+                                    <IconButton
                                         theme="ghost"
+                                        type='button'
+                                        icon={<RemoveIcon />}
                                         onClick={() => handleOptionRemove(index)}
-                                        className="w-[40px] h-[40px] text-[14px] px-[0]"
+                                        className="hover:opacity-45 transition-opacity"
                                     />
                                 </When>
                                 </div>
                             ))}
-                            <Button
-                                text="Add Option"
-                                buttonType="button"
+                            <IconButton
                                 theme="secondary"
+                                type='button'
+                                icon={<AddIcon />}
                                 onClick={handleAddOption}
-                                className="w-[25%] h-[40px] text-[14px] px-[5px] hover:bg-primaryBlue hover:text-primaryDark transition-all"
-                            />
+                                className="text-[14px] justify-center text-grey px-[10px] py-[5px] max-w-[128px]"
+                            >
+                                Add Option
+                            </IconButton>
                         </fieldset>
-                    
-
                 </div>
                 <div className="diver bg-primaryLight rounded-xl h-[2px] my-[15px]"></div>
                 <div className="inputGroup flex flex-col">
@@ -91,7 +112,7 @@ export default function CreatePollWidget() {
                     <label htmlFor="multipleVotes" className="text-primaryLight mb-[5px]">Allow multiple votes per IP address</label>
                     <ToggleSwitch name="multipleVotes"/>
                 </div>
-                <Button isSubmit={true} theme="primary" onClick={handleSubmit} buttonType="button" text="Create Poll" className="w-[100%] my-[1vh]"/>
+                <Button theme="primary" type='submit' onClick={handleSubmit} className="w-[100%] my-[1vh]">Create Poll</Button>
             </form>
         </PollContainer>
     )
