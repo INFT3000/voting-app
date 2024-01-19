@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 function ToggleSwitch({ name }: { name: string }): JSX.Element {
   const [enabled, setEnabled] = useState(false);
@@ -17,10 +17,10 @@ function ToggleSwitch({ name }: { name: string }): JSX.Element {
         onChange={handleChange}
       />
       <div
-        className={`flex w-[50px] items-center rounded-full p-1 ${enabled ? 'bg-primaryBlue' : 'bg-tetraDark'} transition-all duration-300`}
+        className={`flex w-[50px] items-center rounded-full p-1 ${enabled ? "bg-primaryBlue" : "bg-tetraDark"} transition-all duration-300`}
       >
         <div
-          className={`size-[20px] rounded-full bg-white transition-all duration-300${enabled ? 'translate-x-full bg-primaryBlue' : ''}`}
+          className={`size-[20px] rounded-full bg-white transition-all duration-300${enabled ? "translate-x-full bg-primaryBlue" : ""}`}
         />
       </div>
     </label>

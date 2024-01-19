@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import React, { useState } from 'react';
-import { When } from 'react-if';
+import Image from "next/image";
+import React, { useState } from "react";
+import { When } from "react-if";
 
-import Button from './Button';
-import IconButton from './IconButton';
-import PollContainer from './PollContainer';
-import ToggleSwitch from './ToggleSwitch';
+import Button from "./Button";
+import IconButton from "./IconButton";
+import PollContainer from "./PollContainer";
+import ToggleSwitch from "./ToggleSwitch";
 
 function RemoveIcon(): JSX.Element {
   return (
@@ -32,10 +32,10 @@ function AddIcon(): JSX.Element {
 }
 
 export default function CreatePollWidget(): JSX.Element {
-  const [options, setOptions] = useState(['', '']);
+  const [options, setOptions] = useState(["", ""]);
 
   const handleAddOption = (): void => {
-    setOptions([...options, '']);
+    setOptions([...options, ""]);
   };
 
   const handleOptionChange = (value: string, index: number): void => {
@@ -55,7 +55,7 @@ export default function CreatePollWidget(): JSX.Element {
 
     // todo: react-form-hook, and validation
 
-    console.log('Submitted!');
+    console.log("Submitted!");
   };
 
   return (

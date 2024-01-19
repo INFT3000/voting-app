@@ -9,6 +9,8 @@
   },
   "rules": {
     "jsx-quotes": ["error", "prefer-double"],
+    "quotes": ["error", "double"],
+    "@typescript-eslint/quotes": ["error", "double"],
     "react/prop-types": "off",
     "tailwindcss/no-custom-classname": "off",
     "tailwindcss/no-contradicting-classname": "error",

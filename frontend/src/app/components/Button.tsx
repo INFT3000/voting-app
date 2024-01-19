@@ -1,22 +1,22 @@
-import React from 'react';
+import React from "react";
 
-export type ButtonTheme = 'primary' | 'secondary' | 'ghost';
+export type ButtonTheme = "primary" | "secondary" | "ghost";
 
-export type ButtonProps = React.ComponentPropsWithoutRef<'button'> & {
+export type ButtonProps = React.ComponentPropsWithoutRef<"button"> & {
   theme?: ButtonTheme;
 };
 
 const themes = {
-  primary: 'bg-primaryBlue rounded-lg text-primaryDark font-medium px-[50px] py-[7px]',
-  secondary: 'bg-transparent border-primaryBlue border-2 rounded-lg text-white font-medium px-[50px] py-[7px]',
-  ghost: 'bg-transparent text-primaryBlue font-medium',
+  primary: "bg-primaryBlue rounded-lg text-primaryDark font-medium px-[50px] py-[7px]",
+  secondary: "bg-transparent border-primaryBlue border-2 rounded-lg text-white font-medium px-[50px] py-[7px]",
+  ghost: "bg-transparent text-primaryBlue font-medium",
 };
 
 const getButtonStyle = (theme?: ButtonTheme): string => {
   if (theme) {
     return themes[theme];
   }
-  return '';
+  return "";
 };
 // MouseEventHandler<HTMLButtonElement>
 function Button({
@@ -24,7 +24,7 @@ function Button({
 }: ButtonProps): JSX.Element {
   const style = getButtonStyle(theme);
   return (
-    <button {...props} className={`${style} ${className}`} type={type || 'button'}>
+    <button {...props} className={`${style} ${className}`} type={type || "button"}>
       {children}
     </button>
   );

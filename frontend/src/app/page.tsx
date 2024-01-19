@@ -1,9 +1,9 @@
-import Link from 'next/link';
-import React from 'react';
+import Link from "next/link";
+import React from "react";
 
-import Button from './components/Button';
-import CreatePollWidget from './components/CreatePollWidget';
-import Navbar from './components/Navbar';
+import Button from "./components/Button";
+import CreatePollWidget from "./components/CreatePollWidget";
+import Navbar from "./components/Navbar";
 
 export default function Home(): JSX.Element {
   return (
