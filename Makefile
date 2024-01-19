@@ -1,8 +1,8 @@
 develop:
-	cd frontend && pnpm i && pnpm dev
+	cd frontend && make develop
 
 start-backend:
 	cd backend && go run main.go
 
 lint:
-	cd frontend && pnpm lint
+	cd frontend && make lint

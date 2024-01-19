@@ -1,120 +1,126 @@
 'use client';
-import React from "react"
-import PollContainer from "./PollContainer"
-import Button from "./Button"
-import { useState } from "react";
-import { When } from "react-if";
-import ToggleSwitch from "./ToggleSwitch";
-import Image from "next/image";
-import IconButton from "./IconButton";
 
-const RemoveIcon = () => (
+import Image from 'next/image';
+import React, { useState } from 'react';
+import { When } from 'react-if';
+
+import Button from './Button';
+import IconButton from './IconButton';
+import PollContainer from './PollContainer';
+import ToggleSwitch from './ToggleSwitch';
+
+function RemoveIcon(): JSX.Element {
+  return (
     <Image
-        src="/icons/x.svg"
-        alt="remove"
-        width={18}
-        height={18}
+      src="/icons/x.svg"
+      alt="remove"
+      width={18}
+      height={18}
     />
-);
-
-const AddIcon = () => (
-    <Image
-        src="/icons/plus.svg"
-        alt="add"
-        width={16}
-        height={20}
-    />
-);
-
-export default function CreatePollWidget() {
-    const [options, setOptions] = useState(["", ""]);
-
-    const handleAddOption = () => {
-        setOptions([...options, ""]);
-    };
-    
-    const handleOptionChange = (value, index) => {
-        const newOptions = [...options];
-        newOptions[index] = value;
-        setOptions(newOptions);
-    };
-
-    const handleOptionRemove = (index) => {
-        const newOptions = [...options];
-        newOptions.splice(index, 1);
-        setOptions(newOptions);
-    };
-    
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        console.log("Submitted!");
-    }
-    
-
-    return (
-        <PollContainer> 
-            <form className="w-[100%] ">
-                <div className="inputGroup flex flex-col">
-                    <label htmlFor="title" className="font-medium text-white mb-[5px]">Title</label>
-                    <input type="text" name="title" id="title" placeholder="Type your question here." className="bg-tetraDark rounded-lg p-[10px] mb-[10px] outline-none focus:border-primaryBlue focus:border-[1px] text-white"/>
-                </div>
-                <div className="inputGroup flex flex-col">
-                    
-                        <fieldset className="flex flex-col">
-                            <legend className="font-medium text-white mb-[5px]">Answer Options</legend>
-                            {options.map((option, index) => (
-                                <div
-                                    key={index}
-                                    className="flex items-center bg-tetraDark rounded-lg p-[10px] mb-[10px] h-[40px]"
-                                >
-                                <input
-                                    placeholder={`Option ${index + 1}`}
-                                    value={option}
-                                    onChange={(e) => handleOptionChange(e.target.value, index)}
-                                    className=" bg-tetraDark text-white grow"
-                                />
-                                {/*Only show the remove button if there are more than 2 options*/}
-                                <When condition={index > 1}>
-                                    <IconButton
-                                        theme="ghost"
-                                        type='button'
-                                        icon={<RemoveIcon />}
-                                        onClick={() => handleOptionRemove(index)}
-                                        className="hover:opacity-45 transition-opacity"
-                                    />
-                                </When>
-                                </div>
-                            ))}
-                            <IconButton
-                                theme="secondary"
-                                type='button'
-                                icon={<AddIcon />}
-                                onClick={handleAddOption}
-                                className="text-[14px] justify-center text-grey px-[10px] py-[5px] max-w-[128px]"
-                            >
-                                Add Option
-                            </IconButton>
-                        </fieldset>
-                </div>
-                <div className="diver bg-primaryLight rounded-xl h-[2px] my-[15px]"></div>
-                <div className="inputGroup flex flex-col">
-                    <label htmlFor="title" className="font-medium text-white mb-[5px]">Answer Type</label>
-                    <select className="bg-tetraDark rounded-lg p-[10px] mb-[10px] outline-none focus:border-primaryBlue focus:border-[1px] text-white" >
-                        <option value="multiple">Multiple Choice</option>
-                    </select>
-                </div>
-                <div className="inputGroup flex flex-row justify-between my-[1vh]">
-                    <label htmlFor="multipleOptions" className="text-primaryLight mb-[5px]">Allow selection of multiple options</label>
-                    <ToggleSwitch name="multipleOptions"/>
-                </div>
-                <div className="inputGroup flex flex-row justify-between">
-                    <label htmlFor="multipleVotes" className="text-primaryLight mb-[5px]">Allow multiple votes per IP address</label>
-                    <ToggleSwitch name="multipleVotes"/>
-                </div>
-                <Button theme="primary" type='submit' onClick={handleSubmit} className="w-[100%] my-[1vh]">Create Poll</Button>
-            </form>
-        </PollContainer>
-    )
+  );
 }
 
+function AddIcon(): JSX.Element {
+  return (
+    <Image
+      src="/icons/plus.svg"
+      alt="add"
+      width={16}
+      height={20}
+    />
+  );
+}
+
+export default function CreatePollWidget(): JSX.Element {
+  const [options, setOptions] = useState(['', '']);
+
+  const handleAddOption = (): void => {
+    setOptions([...options, '']);
+  };
+
+  const handleOptionChange = (value: string, index: number): void => {
+    const newOptions = [...options];
+    newOptions[index] = value;
+    setOptions(newOptions);
+  };
+
+  const handleOptionRemove = (index: number): void => {
+    const newOptions = [...options];
+    newOptions.splice(index, 1);
+    setOptions(newOptions);
+  };
+
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>): void => {
+    e.preventDefault();
+
+    // todo: react-form-hook, and validation
+
+    console.log('Submitted!');
+  };
+
+  return (
+    <PollContainer>
+      <form className="w-[100%] ">
+        <div className="inputGroup flex flex-col">
+          <label htmlFor="title" className="mb-[5px] font-medium text-white">Title</label>
+          <input type="text" name="title" id="title" placeholder="Type your question here." className="mb-[10px] rounded-lg bg-tetraDark p-[10px] text-white outline-none focus:border-[1px] focus:border-primaryBlue" />
+        </div>
+        <div className="inputGroup flex flex-col">
+
+          <fieldset className="flex flex-col">
+            <legend className="mb-[5px] font-medium text-white">Answer Options</legend>
+            {options.map((option, index) => (
+              <div
+                // eslint-disable-next-line react/no-array-index-key
+                key={index}
+                className="mb-[10px] flex h-[40px] items-center rounded-lg bg-tetraDark p-[10px]"
+              >
+                <input
+                  placeholder={`Option ${index + 1}`}
+                  value={option}
+                  onChange={(e) => handleOptionChange(e.target.value, index)}
+                  className=" grow bg-tetraDark text-white"
+                />
+                {/* Only show the remove button if there are more than 2 options */}
+                <When condition={index > 1}>
+                  <IconButton
+                    theme="ghost"
+                    type="button"
+                    icon={<RemoveIcon />}
+                    onClick={() => handleOptionRemove(index)}
+                    className="transition-opacity hover:opacity-45"
+                  />
+                </When>
+              </div>
+            ))}
+            <IconButton
+              theme="secondary"
+              type="button"
+              icon={<AddIcon />}
+              onClick={handleAddOption}
+              className="max-w-[128px] justify-center px-[10px] py-[5px] text-[14px] text-grey"
+            >
+              Add Option
+            </IconButton>
+          </fieldset>
+        </div>
+        <div className="diver my-[15px] h-[2px] rounded-xl bg-primaryLight" />
+        <div className="inputGroup flex flex-col">
+          <label htmlFor="title" className="mb-[5px] font-medium text-white">Answer Type</label>
+          <select className="mb-[10px] rounded-lg bg-tetraDark p-[10px] text-white outline-none focus:border-[1px] focus:border-primaryBlue">
+            <option value="multiple">Multiple Choice</option>
+          </select>
+        </div>
+        <div className="inputGroup my-[1vh] flex flex-row justify-between">
+          <label htmlFor="multipleOptions" className="mb-[5px] text-primaryLight">Allow selection of multiple options</label>
+          <ToggleSwitch name="multipleOptions" />
+        </div>
+        <div className="inputGroup flex flex-row justify-between">
+          <label htmlFor="multipleVotes" className="mb-[5px] text-primaryLight">Allow multiple votes per IP address</label>
+          <ToggleSwitch name="multipleVotes" />
+        </div>
+        <Button theme="primary" type="submit" onClick={handleSubmit} className="my-[1vh] w-[100%]">Create Poll</Button>
+      </form>
+    </PollContainer>
+  );
+}
