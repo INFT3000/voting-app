@@ -4,7 +4,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/INFT3000/voting-app/src/server"
+	"github.com/INFT3000/voting-app/server"
 )
 
 func main() {	
