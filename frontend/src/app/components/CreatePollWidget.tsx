@@ -63,7 +63,13 @@ export default function CreatePollWidget(): JSX.Element {
       <form className="w-[100%] ">
         <div className="inputGroup flex flex-col">
           <label htmlFor="title" className="mb-[5px] font-medium text-white">Title</label>
-          <input type="text" name="title" id="title" placeholder="Type your question here." className="mb-[10px] rounded-lg bg-tetraDark p-[10px] text-white outline-none focus:border-[1px] focus:border-primaryBlue" />
+          <input
+            type="text"
+            name="title"
+            id="title"
+            placeholder="Type your question here."
+            className="mb-[10px] rounded-lg bg-tetraDark p-[10px] text-white outline-none focus:border-[1px] focus:border-primaryBlue"
+          />
         </div>
         <div className="inputGroup flex flex-col">
 
@@ -79,7 +85,7 @@ export default function CreatePollWidget(): JSX.Element {
                   placeholder={`Option ${index + 1}`}
                   value={option}
                   onChange={(e) => handleOptionChange(e.target.value, index)}
-                  className=" grow bg-tetraDark text-white"
+                  className=" w-full grow bg-tetraDark text-white"
                 />
                 {/* Only show the remove button if there are more than 2 options */}
                 <When condition={index > 1}>
@@ -98,7 +104,7 @@ export default function CreatePollWidget(): JSX.Element {
               type="button"
               icon={<AddIcon />}
               onClick={handleAddOption}
-              className="max-w-[128px] justify-center px-[10px] py-[5px] text-[14px] text-grey"
+              className="max-w-[30vw] justify-center px-[3px] text-[14px] text-grey md:w-[15vw] md:text-[12px] lg:w-[10vw] lg:text-[13px]"
             >
               Add Option
             </IconButton>

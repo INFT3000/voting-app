@@ -21,7 +21,6 @@ function ToggleSwitch({ name }: { name: string }): JSX.Element {
       >
         <div
           className={`size-[20px] rounded-full bg-white transition-all duration-300 ${enabled ? "translate-x-full bg-primaryBlue" : ""}`}
-
         />
       </div>
     </label>
