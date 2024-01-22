@@ -9,8 +9,8 @@ export default function Home(): JSX.Element {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center">
       <Navbar />
-      <section className="flex h-[100vh] flex-row items-center justify-center">
-        <div className="headerCont w-[50%]">
+      <section className="flex h-[100vh] flex-row items-center justify-between">
+        <div className="headerCont w-[40%]">
           <h1 className="text-left text-6xl font-bold text-white">Create a Poll <br /><span className="text-primaryBlue">in seconds</span>.</h1>
           <p className="my-[20px] text-left text-primaryLight">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec urna ex,
@@ -26,7 +26,7 @@ export default function Home(): JSX.Element {
             </Button>
           </div>
         </div>
-        <div className="pollCreationCont flex w-[50%] items-center justify-center">
+        <div className="pollCreationCont flex w-[40%] items-center justify-end">
           <CreatePollWidget />
         </div>
       </section>
