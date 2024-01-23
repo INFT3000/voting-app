@@ -18,7 +18,9 @@ func getUser(c *gin.Context) {
 	}
 	var user models.User
 
-	database.DB.Find(&user, "id = ?", id)
+	database.Context.Find(&user, "id = ?", id)
+
+	database.Context.Model(&user).Where("id = ?", id).Association("Polls").Find(&user.Polls);
 
 	if user.Id == 0 {
 		c.IndentedJSON(http.StatusNotFound, gin.H{"error": "user not found"})
@@ -36,7 +38,7 @@ func postUser(c *gin.Context) {
 	}
 	user.Id = 0 // ensure id is not set, so gorm knows to handle it as a new record
 
-	database.DB.Create(&user)
+	database.Context.Create(&user)
 	c.JSON(http.StatusCreated, gin.H{"status": "created"})
 }
 
@@ -47,7 +49,7 @@ func putUser(c *gin.Context) {
 		return
 	}
 
-	database.DB.Save(&user)
+	database.Context.Save(&user)
 	c.JSON(http.StatusOK, gin.H{"status": "updated"})
 }
 
@@ -60,7 +62,7 @@ func deleteUser(c *gin.Context) {
 	user := models.User{
 		Id: uint(id),
 	}
-	database.DB.Delete(&user)
+	database.Context.Delete(&user)
 	c.JSON(http.StatusOK, gin.H{"status": "deleted"})
 }
 

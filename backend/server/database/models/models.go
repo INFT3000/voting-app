@@ -2,8 +2,11 @@ package models
 
 type User struct {
 	Id       uint   `json:"id" gorm:"primary_key"`
+	Email    string `json:"email"`
 	Username string `json:"username"`
-	Password string `json:"password"` // will not be stored in plaintext or ever sent to client.
+	Password string // will not be stored in plaintext or ever sent to client.
+
+	Polls []Poll `json:"polls"`
 }
 
 type VoterSession struct { // stores info about one particular voter's session whether or not they have an account.
@@ -20,21 +23,31 @@ type PollSettings struct {
 }
 
 type Poll struct {
-	Id         uint   `json:"id" gorm:"primary_key"`
-	OwnerID    uint   `json:"owner_id"`
-	SettingsId uint   `json:"settings_id"`
-	Question   string `json:"question"`
+	Id             uint   `json:"id" gorm:"primary_key"`
+	UserId         uint   `json:"owner_id"`
+	PollSettingsId uint   `json:"poll_settings_id"`
+	Question       string `json:"question"`
+
+	User     User         `json:"user"`
+	PollSettings PollSettings `json:"settings"`
+	Options  []Option     `json:"options"`
 }
 
 type Option struct {
 	Id     uint   `json:"id" gorm:"primary_key"`
-	PollID uint   `json:"poll_id"`
+	PollId uint   `json:"poll_id"`
 	Text   string `json:"text"`
+
+	Votes []Vote `json:"votes"`
 }
 
 type Vote struct {
 	Id       uint `json:"id" gorm:"primary_key"`
-	PollID   uint `json:"poll_id"`
+	PollId   uint `json:"poll_id"`
 	VoterId  uint `json:"voter_id"`
-	OptionID uint `json:"option_id"`
+	OptionId uint `json:"option_id"`
+
+	Poll   Poll   `json:"poll"`
+	Voter  User   `json:"voter"`
+	Option Option `json:"option"`
 }
