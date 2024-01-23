@@ -44,10 +44,10 @@ type Option struct {
 type Vote struct {
 	Id       uint `json:"id" gorm:"primary_key"`
 	PollId   uint `json:"poll_id"`
-	VoterId  uint `json:"voter_id"`
+	VoterSessionId  uint `json:"voter_id"`
 	OptionId uint `json:"option_id"`
 
 	Poll   Poll   `json:"poll"`
-	Voter  User   `json:"voter"`
+	VoterSession  VoterSession   `json:"voter"`
 	Option Option `json:"option"`
 }
