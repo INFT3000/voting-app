@@ -2,12 +2,9 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/INFT3000/voting-app/server"
 )
 
-func main() {	
-	fmt.Println("Hello")
+func main() {
 	server.Start()
 }
