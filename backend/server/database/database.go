@@ -1,16 +1,28 @@
 package database
 
 import (
+	"fmt"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 
 	"github.com/INFT3000/voting-app/server/database/models"
+	"github.com/INFT3000/voting-app/server/env"
 )
 
 var Context *gorm.DB
-var dsn string = "user:mysql@tcp(127.0.0.1:3306)/quickpoll?charset=utf8mb4" // todo: construct from env
 
 func ConnectDatabase() {
+	var dsn string = fmt.Sprintf(
+		"%s:%s@tcp(%s:%s)/%s?%s",
+		env.Env.DB_USER,
+		env.Env.DB_PASSWORD,
+		env.Env.DB_HOST,
+		env.Env.DB_PORT,
+		env.Env.DB_DATABASE,
+		env.Env.DB_DSN_PARAMS,
+	)
+
 	connectionConfig := mysql.Config{
 		DSN:                       dsn,
 		DefaultStringSize:         256,

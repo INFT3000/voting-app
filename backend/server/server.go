@@ -3,6 +3,7 @@ package server
 import (
 	"github.com/INFT3000/voting-app/server/controller"
 	"github.com/INFT3000/voting-app/server/database"
+	"github.com/INFT3000/voting-app/server/env"
 	"github.com/INFT3000/voting-app/server/module"
 
 	"github.com/gin-gonic/gin"
@@ -12,6 +13,7 @@ func init() { // called specifically when the package is imported.
 	gin.SetMode(gin.DebugMode)
 
 	// initialize database
+	env.LoadEnv()
 	database.ConnectDatabase()
 }
 
