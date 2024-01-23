@@ -51,8 +51,8 @@ func New(name string, route string, endpoints *[]Endpoint, middleware *[]gin.Han
 		m = *middleware
 	}
 	return &QuickPollController{
-		Name:       "HealthController",
-		Route:      "/health",
+		Name:       name,
+		Route:      route,
 		Endpoints:  e,
 		Middleware: m,
 	}

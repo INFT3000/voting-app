@@ -3,24 +3,27 @@ package controller
 import (
 	"net/http"
 
-	"github.com/INFT3000/voting-app/server/models"
 	"github.com/gin-gonic/gin"
 )
 
-var okayHealthStatus models.Health = models.Health{
+type HealthResp struct {
+	Status string `json:"status"`
+}
+
+var okayHealthStatus HealthResp = HealthResp{
 	Status: "OK",
 }
 
 func getHealth(c *gin.Context) {
-	c.IndentedJSON(200, okayHealthStatus)
+	c.IndentedJSON(http.StatusOK, okayHealthStatus)
 }
 
 func getError(c *gin.Context) {
-	c.IndentedJSON(500, models.Health{Status: "Not good!"})
+	c.IndentedJSON(http.StatusInternalServerError, HealthResp{Status: "Not good!"})
 }
 
 func postExample(c *gin.Context) {
-	var health models.Health
+	var health HealthResp
 	if err := c.ShouldBindJSON(&health); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

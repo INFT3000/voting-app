@@ -2,6 +2,7 @@ package server
 
 import (
 	"github.com/INFT3000/voting-app/server/controller"
+	"github.com/INFT3000/voting-app/server/database"
 	"github.com/INFT3000/voting-app/server/module"
 
 	"github.com/gin-gonic/gin"
@@ -9,6 +10,9 @@ import (
 
 func init() { // called specifically when the package is imported.
 	gin.SetMode(gin.DebugMode)
+
+	// initialize database
+	database.ConnectDatabase()
 }
 
 // createQuickPollApp creates a gin.Engine with configured settings.
@@ -29,6 +33,7 @@ func createQuickPollApp() *gin.Engine {
 		Engine: g,
 		Controllers: []controller.QuickPollController{
 			*controller.HealthController,
+			*controller.UserController,
 		},
 		Middleware: []gin.HandlerFunc{
 			gin.Logger(),
