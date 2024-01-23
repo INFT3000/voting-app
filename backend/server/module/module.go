@@ -3,22 +3,20 @@ package module
 import (
 	"log"
 
+	"github.com/INFT3000/voting-app/server/controller"
 	"github.com/gin-gonic/gin"
 )
 
-type QuickPollController interface {
-	SubscribeEndpoints(r *gin.Engine) error
-}
-
+// QuickPollModule is used to bundle controllers, middleware, and providers together.
 type QuickPollModule struct {
 	Engine      *gin.Engine
-	Controllers []QuickPollController
+	Controllers []controller.QuickPollController
 	Middleware  []gin.HandlerFunc
 }
 
 func (m QuickPollModule) SubscribeEndpoints(r *gin.Engine) {
 	for _, controller := range m.Controllers {
-		if err := controller.SubscribeEndpoints(r); err != nil {
+		if err := controller.Initialize(r); err != nil {
 			log.New(gin.DefaultWriter, "", log.LstdFlags).Println(err)
 		}
 	}
