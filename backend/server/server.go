@@ -1,10 +1,14 @@
 package server
 
 import (
+	"log"
+
 	"github.com/INFT3000/voting-app/server/controller"
 	"github.com/INFT3000/voting-app/server/database"
 	"github.com/INFT3000/voting-app/server/env"
 	"github.com/INFT3000/voting-app/server/module"
+	"github.com/getsentry/sentry-go"
+	sentrygin "github.com/getsentry/sentry-go/gin"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,7 +18,20 @@ func init() { // called specifically when the package is imported.
 
 	// initialize database
 	env.LoadEnv()
+	setupSentry()
 	database.ConnectDatabase()
+}
+
+func setupSentry() {
+	err := sentry.Init(sentry.ClientOptions{
+		Dsn:              env.Env.SENTRY_DSN,
+		EnableTracing:    true,
+		Environment:      env.Env.ENV,
+		TracesSampleRate: 1.0, // capture 100% of transactions
+	})
+	if err != nil {
+		log.Fatalf("Failed to initialize sentry: %v\n", err)
+	}
 }
 
 // createQuickPollApp creates a gin.Engine with configured settings.
@@ -40,6 +57,10 @@ func createQuickPollApp() *gin.Engine {
 		Middleware: []gin.HandlerFunc{
 			gin.Logger(),
 			gin.Recovery(),
+			sentrygin.New(sentrygin.Options{
+				Repanic: true, // gin.Recovery() already does this, but we want to capture panics in sentry.
+
+			}),
 		},
 	}
 	appModule.Initialize()

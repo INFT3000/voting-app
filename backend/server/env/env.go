@@ -18,6 +18,9 @@ type Environment struct {
 	DB_DATABASE   string `validate:"required,alphanum"`
 	DB_DSN_PARAMS string `validate:"required"`
 	DB_PASSWORD   string `validate:"required"`
+
+	SENTRY_DSN string `validate:"required,url"`
+	ENV        string `validate:"required,oneof=dev"` // when prod is up, `validate:"required,oneof=dev prod"`
 }
 
 var Env *Environment = &Environment{}

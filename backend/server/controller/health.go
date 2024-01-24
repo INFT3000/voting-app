@@ -19,7 +19,7 @@ func getHealth(c *gin.Context) {
 }
 
 func getError(c *gin.Context) {
-	c.IndentedJSON(http.StatusInternalServerError, HealthResp{Status: "Not good!"})
+	panic("test error! hi :)")
 }
 
 func postExample(c *gin.Context) {
