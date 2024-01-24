@@ -1,41 +1,44 @@
 package env
 
 import (
+	"fmt"
 	"os"
+	"reflect"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/joho/godotenv"
 )
 
-/*
-DB_USER=user
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=quickpoll
-DB_DSN_PARAMS=charset=utf8mb4
-DB_PASSWORD=
-*/
+var validate *validator.Validate = validator.New(validator.WithRequiredStructEnabled())
 
 type Environment struct {
-	DB_USER       string
-	DB_HOST       string
-	DB_PORT       string
-	DB_DATABASE   string
-	DB_DSN_PARAMS string
-	DB_PASSWORD   string
+	DB_USER       string `validate:"required,alphanum"`
+	DB_HOST       string `validate:"required,ip"`
+	DB_PORT       string `validate:"required,numeric"`
+	DB_DATABASE   string `validate:"required,alphanum"`
+	DB_DSN_PARAMS string `validate:"required"`
+	DB_PASSWORD   string `validate:"required"`
 }
 
 var Env *Environment = &Environment{}
 
 func LoadEnv() {
-	err := godotenv.Load(".env", ".secret.env")
-	if err != nil {
-		panic("Failed to load environment variables!")
+	godotenv.Load(".env", ".secret.env") // this can give an error but we validate after and that gives us more info.
+
+	v := reflect.ValueOf(Env).Elem()
+
+	for i := 0; i < v.NumField(); i++ {
+		fieldName := v.Type().Field(i).Name
+		v.Field(i).SetString(os.Getenv(fieldName))
 	}
 
-	Env.DB_USER = os.Getenv("DB_USER")
-	Env.DB_HOST = os.Getenv("DB_HOST")
-	Env.DB_PORT = os.Getenv("DB_PORT")
-	Env.DB_DATABASE = os.Getenv("DB_DATABASE")
-	Env.DB_DSN_PARAMS = os.Getenv("DB_DSN_PARAMS")
-	Env.DB_PASSWORD = os.Getenv("DB_PASSWORD")
+	err := validate.Struct(Env)
+	if err != nil {
+		if validationErrors, ok := err.(validator.ValidationErrors); ok {
+			for _, e := range validationErrors {
+				fmt.Printf("Error in field: %s, Condition: %s\n", e.StructField(), e.ActualTag())
+			}
+		}
+		os.Exit(1)
+	}
 }
