@@ -1,13 +1,25 @@
 "use client";
 
+import { ErrorMessage } from "@hookform/error-message";
 import Image from "next/image";
 import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import { When } from "react-if";
 
 import Button from "./Button";
 import IconButton from "./IconButton";
 import PollContainer from "./PollContainer";
 import ToggleSwitch from "./ToggleSwitch";
+
+interface ICreatePoll {
+  title: string;
+  options: string[];
+  type: "multiple" | "single";
+  settings: {
+    disallowAnonymous: boolean;
+    disallowSameIp: boolean;
+  };
+}
 
 function RemoveIcon(): JSX.Element {
   return (
@@ -31,7 +43,19 @@ function AddIcon(): JSX.Element {
   );
 }
 
+function ErrorText({ message }: { message: string }): JSX.Element {
+  return (
+    <p style={{ color: "red" }}>{message}</p>
+  );
+}
+
 export default function CreatePollWidget(): JSX.Element {
+  const formMethods = useForm<ICreatePoll>();
+  const {
+    register, setError, formState, handleSubmit,
+  } = formMethods;
+
+  const { errors } = formState;
   const [options, setOptions] = useState(["", ""]);
 
   const handleAddOption = (): void => {
@@ -50,25 +74,27 @@ export default function CreatePollWidget(): JSX.Element {
     setOptions(newOptions);
   };
 
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>): void => {
-    e.preventDefault();
-
-    // todo: react-form-hook, and validation
-
+  const onSubmit = (payload: ICreatePoll): void => {
+    console.log(payload);
     console.log("Submitted!");
   };
 
   return (
     <PollContainer>
-      <form className="w-[100%] ">
+      <form className="w-[100%]" onSubmit={handleSubmit(onSubmit)}>
         <div className="inputGroup flex flex-col">
           <label htmlFor="title" className="mb-[5px] font-medium text-white">Title</label>
           <input
             type="text"
-            name="title"
+            {...register("title", { required: "Title is required", minLength: 3, maxLength: 255 })}
             id="title"
             placeholder="Type your question here."
             className="mb-[10px] rounded-lg bg-tetraDark p-[10px] text-white outline-none focus:border-[1px] focus:border-primaryBlue"
+          />
+          <ErrorMessage
+            errors={errors}
+            name="title"
+            render={ErrorText}
           />
         </div>
         <div className="inputGroup flex flex-col">
@@ -125,7 +151,7 @@ export default function CreatePollWidget(): JSX.Element {
           <label htmlFor="multipleVotes" className="mb-[5px] text-primaryLight">Allow multiple votes per IP address</label>
           <ToggleSwitch name="multipleVotes" />
         </div>
-        <Button theme="primary" type="submit" onClick={handleSubmit} className="my-[1vh] w-[100%]">Create Poll</Button>
+        <Button theme="primary" type="submit" className="my-[1vh] w-[100%]">Create Poll</Button>
       </form>
     </PollContainer>
   );
