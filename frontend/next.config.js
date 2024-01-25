@@ -1,13 +1,28 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value: "worker-src 'self' blob:",
+          },
+        ],
+      },
+    ];
+  },
+};
 
-module.exports = nextConfig
-
+module.exports = nextConfig;
 
 // Injected content via Sentry wizard below
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const { withSentryConfig } = require("@sentry/nextjs");
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
 module.exports = withSentryConfig(
   module.exports,
   {
@@ -18,7 +33,7 @@ module.exports = withSentryConfig(
     silent: true,
     org: "sdunne",
     project: "quickpoll-frontend",
-    url: "https://sentry.sdunne.dev/"
+    url: "https://sentry.sdunne.dev/",
   },
   {
     // For all available options, see:
@@ -44,5 +59,5 @@ module.exports = withSentryConfig(
     // https://docs.sentry.io/product/crons/
     // https://vercel.com/docs/cron-jobs
     automaticVercelMonitors: true,
-  }
+  },
 );
