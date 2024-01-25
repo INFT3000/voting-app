@@ -55,24 +55,13 @@ export default function Page(): JSX.Element {
             }, async () => {
               const res = await fetch("/api/sentry-example-api");
               if (!res.ok) {
-                throw new Error("Sentry Example Frontend Error");
+                throw new Error("This is a frontend error :(");
               }
             });
           }}
         >
           Throw error!
         </button>
-
-        <p>
-          Next, look for the error on the{" "}
-          <a href="https://sentry.sdunne.dev/organizations/sdunne/issues/?project=3">Issues Page</a>.
-        </p>
-        <p style={{ marginTop: "24px" }}>
-          For more information, see{" "}
-          <a href="https://docs.sentry.io/platforms/javascript/guides/nextjs/">
-            https://docs.sentry.io/platforms/javascript/guides/nextjs/
-          </a>
-        </p>
       </main>
     </div>
   );
