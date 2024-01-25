@@ -14,10 +14,10 @@ import ToggleSwitch from "./ToggleSwitch";
 interface ICreatePoll {
   title: string;
   options: string[];
-  type: "multiple" | "single";
+  isMultipleChoice: boolean;
   settings: {
     disallowAnonymous: boolean;
-    disallowSameIp: boolean;
+    allowSameIp: boolean;
   };
 }
 
@@ -86,7 +86,7 @@ export default function CreatePollWidget(): JSX.Element {
           <label htmlFor="title" className="mb-[5px] font-medium text-white">Title</label>
           <input
             type="text"
-            {...register("title", { required: "Title is required", minLength: 3, maxLength: 255 })}
+            {...register("title", { required: "Required", minLength: 3, maxLength: 255 })}
             id="title"
             placeholder="Type your question here."
             className="mb-[10px] rounded-lg bg-tetraDark p-[10px] text-white outline-none focus:border-[1px] focus:border-primaryBlue"
@@ -105,24 +105,35 @@ export default function CreatePollWidget(): JSX.Element {
               <div
                 // eslint-disable-next-line react/no-array-index-key
                 key={index}
-                className="mb-[10px] flex h-[40px] items-center rounded-lg bg-tetraDark p-[10px]"
+                className="flex flex-col justify-between"
               >
-                <input
-                  placeholder={`Option ${index + 1}`}
-                  value={option}
-                  onChange={(e) => handleOptionChange(e.target.value, index)}
-                  className=" w-full grow bg-tetraDark text-white"
-                />
-                {/* Only show the remove button if there are more than 2 options */}
-                <When condition={index > 1}>
-                  <IconButton
-                    theme="ghost"
-                    type="button"
-                    icon={<RemoveIcon />}
-                    onClick={() => handleOptionRemove(index)}
-                    className="transition-opacity hover:opacity-45"
+                <div
+                  className="mb-[10px] flex h-[40px] items-center rounded-lg bg-tetraDark p-[10px]"
+                >
+                  <input
+                    type="text"
+                    {...register(`options.${index}`, { required: "Required", minLength: 1, maxLength: 255 })}
+                    placeholder={`Option ${index + 1}`}
+                    value={option}
+                    onChange={(e) => handleOptionChange(e.target.value, index)}
+                    className=" w-full grow bg-tetraDark text-white"
                   />
-                </When>
+                  {/* Only show the remove button if there are more than 2 options */}
+                  <When condition={index > 1}>
+                    <IconButton
+                      theme="ghost"
+                      type="button"
+                      icon={<RemoveIcon />}
+                      onClick={() => handleOptionRemove(index)}
+                      className="transition-opacity hover:opacity-45"
+                    />
+                  </When>
+                </div>
+                <ErrorMessage
+                  errors={errors}
+                  name={`options.${index}`}
+                  render={ErrorText}
+                />
               </div>
             ))}
             <IconButton
@@ -137,19 +148,23 @@ export default function CreatePollWidget(): JSX.Element {
           </fieldset>
         </div>
         <div className="diver my-[15px] h-[2px] rounded-xl bg-primaryLight" />
-        <div className="inputGroup flex flex-col">
-          <label htmlFor="title" className="mb-[5px] font-medium text-white">Answer Type</label>
-          <select className="mb-[10px] rounded-lg bg-tetraDark p-[10px] text-white outline-none focus:border-[1px] focus:border-primaryBlue">
-            <option value="multiple">Multiple Choice</option>
-          </select>
-        </div>
         <div className="inputGroup my-[1vh] flex flex-row justify-between">
           <label htmlFor="multipleOptions" className="mb-[5px] text-primaryLight">Allow selection of multiple options</label>
-          <ToggleSwitch name="multipleOptions" />
+          <ToggleSwitch
+            {...register("isMultipleChoice")}
+          />
+        </div>
+        <div className="inputGroup my-[1vh] flex flex-row justify-between">
+          <label htmlFor="multipleVotes" className="mb-[5px] text-primaryLight">Allow multiple votes per IP address</label>
+          <ToggleSwitch
+            {...register("settings.allowSameIp")}
+          />
         </div>
         <div className="inputGroup flex flex-row justify-between">
-          <label htmlFor="multipleVotes" className="mb-[5px] text-primaryLight">Allow multiple votes per IP address</label>
-          <ToggleSwitch name="multipleVotes" />
+          <label htmlFor="multipleVotes" className="mb-[5px] text-primaryLight">Block anonymous voting</label>
+          <ToggleSwitch
+            {...register("settings.disallowAnonymous")}
+          />
         </div>
         <Button theme="primary" type="submit" className="my-[1vh] w-[100%]">Create Poll</Button>
       </form>
