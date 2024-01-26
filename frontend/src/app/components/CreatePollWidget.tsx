@@ -45,7 +45,7 @@ function AddIcon(): JSX.Element {
 
 function ErrorText({ message }: { message: string }): JSX.Element {
   return (
-    <p style={{ color: "red" }}>{message}</p>
+    <p className="text-[#FF0000]">{message}</p>
   );
 }
 
@@ -86,10 +86,20 @@ export default function CreatePollWidget(): JSX.Element {
           <label htmlFor="title" className="mb-[5px] font-medium text-white">Title</label>
           <input
             type="text"
-            {...register("title", { required: "Required", minLength: 3, maxLength: 255 })}
+            {...register("title", {
+              required: "Required",
+              minLength: {
+                value: 3,
+                message: "Title must be at least 3 characters long.",
+              },
+              maxLength: {
+                value: 255,
+                message: "Title must be less than 255 characters long.",
+              },
+            })}
             id="title"
             placeholder="Type your question here."
-            className="mb-[10px] rounded-lg bg-tetraDark p-[10px] text-white outline-none focus:border-[1px] focus:border-primaryBlue"
+            className="mb-[5px] rounded-lg bg-tetraDark p-[10px] text-white outline-none focus:border-[1px] focus:border-primaryBlue"
           />
           <ErrorMessage
             errors={errors}
@@ -105,14 +115,20 @@ export default function CreatePollWidget(): JSX.Element {
               <div
                 // eslint-disable-next-line react/no-array-index-key
                 key={index}
-                className="flex flex-col justify-between"
+                className="mb-[5px] flex flex-col"
               >
                 <div
-                  className="mb-[10px] flex h-[40px] items-center rounded-lg bg-tetraDark p-[10px]"
+                  className="mb-[5px] flex h-[40px] items-center rounded-lg bg-tetraDark p-[10px]"
                 >
                   <input
                     type="text"
-                    {...register(`options.${index}`, { required: "Required", minLength: 1, maxLength: 255 })}
+                    {...register(`options.${index}`, {
+                      required: "Required",
+                      maxLength: {
+                        value: 255,
+                        message: "Must be less than 255 characters long.",
+                      },
+                    })}
                     placeholder={`Option ${index + 1}`}
                     value={option}
                     onChange={(e) => handleOptionChange(e.target.value, index)}
