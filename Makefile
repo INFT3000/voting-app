@@ -6,3 +6,6 @@ start-backend:
 
 lint:
 	cd frontend && make lint
+
+infra:
+	docker-compose up -d --build
