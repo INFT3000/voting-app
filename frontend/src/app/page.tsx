@@ -9,10 +9,11 @@ export default function Home(): JSX.Element {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center">
       <Navbar />
-      <section className="flex h-[100vh] flex-col items-center justify-between xs:flex-col sm:flex-row md:flex-row lg:flex-row">
-        <div className="headerCont w-[40%]">
-          <h1 className="text-left text-6xl font-bold text-white">Create a Poll <br /><span className="text-primaryBlue">in seconds</span>.</h1>
+      <section className="flex h-[100vh] flex-col items-center justify-betwe sm:flex-row">
+        <div className="headerCont">
+          <h1 className="text-left xs:text-nowrap text-6xl font-bold text-white">Create a Poll <br /><span className="text-primaryBlue">in seconds</span>.</h1>
           <p className="my-[20px] text-left text-primaryLight">
+            ouga bouga
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec urna ex,
             porttitor egestas vestibulum ut, tincidunt pellentesque erat. In blandit
             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
