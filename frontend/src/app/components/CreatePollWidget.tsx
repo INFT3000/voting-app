@@ -157,6 +157,7 @@ export default function CreatePollWidget(): JSX.Element {
               type="button"
               icon={<AddIcon />}
               onClick={handleAddOption}
+              
               className="max-w-[30vw] justify-center px-[3px] text-[14px] text-grey md:w-[15vw] md:text-[12px] lg:w-[10vw] lg:text-[13px]"
             >
               Add Option
