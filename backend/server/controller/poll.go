@@ -26,7 +26,7 @@ func postNewPoll(c *gin.Context) {
 	var poll CreatePollRequest
 	if err := c.ShouldBindJSON(&poll); err != nil {
 		c.Errors = append(c.Errors, err.(*gin.Error))
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.AbortWithError(400, err)
 		return
 	}
 
