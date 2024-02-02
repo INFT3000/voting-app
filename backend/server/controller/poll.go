@@ -28,13 +28,16 @@ func postNewPoll(c *gin.Context) {
 		return
 	}
 
+	// start transaction
+	tx := database.Context.Begin()
+
 	// Settings
 	pollSettingsModel := models.PollSettings{
 		MultipleChoice:    poll.Settings.IsMultipleChoice,
 		DisallowAnonymous: poll.Settings.DisallowAnonymous,
 		DisallowSameIp:    poll.Settings.DisallowSameIp,
 	}
-	database.Context.Create(&pollSettingsModel)
+	tx.Create(&pollSettingsModel)
 
 	// Poll
 	pollModel := models.Poll{
@@ -42,19 +45,21 @@ func postNewPoll(c *gin.Context) {
 		PollSettingsId: pollSettingsModel.Id,
 		Uuid:           uuid.New().String(),
 	}
-	database.Context.Create(&pollModel)
+	tx.Create(&pollModel)
 
 	// Options
 	var options []models.Option
 	for _, option := range poll.Options {
 		options = append(options, models.Option{Text: option})
 	}
-	err := database.Context.Model(&pollModel).Association("Options").Append(options)
+	err := tx.Model(&pollModel).Association("Options").Append(options)
 
 	if err != nil {
 		c.AbortWithError(500, err)
 		return
 	}
+
+	tx.Commit()
 
 	res := CreatePollResponse{
 		Uuid: pollModel.Uuid,
