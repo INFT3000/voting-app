@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
 type HttpMethod string
@@ -28,6 +29,8 @@ type QuickPollController struct {
 	Middleware []gin.HandlerFunc
 	Endpoints  []Endpoint
 }
+
+var Validate *validator.Validate = validator.New(validator.WithRequiredStructEnabled())
 
 func (c *QuickPollController) Initialize(r *gin.Engine, basePath string) error {
 	log.New(gin.DefaultWriter, "", log.LstdFlags).Printf("Subscribing endpoints for controller %s", c.Name)

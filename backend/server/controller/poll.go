@@ -4,12 +4,13 @@ import (
 	"github.com/INFT3000/voting-app/server/database"
 	"github.com/INFT3000/voting-app/server/database/models"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
 )
 
 type CreatePollRequest struct {
-	Title    string   `json:"title"`
-	Options  []string `json:"options"`
+	Title    string   `json:"title" validate:"required,gte=2"`
+	Options  []string `json:"options" validate:"required,dive,gte=1"`
 	Settings struct {
 		IsMultipleChoice  bool `json:"isMultipleChoice"`
 		DisallowAnonymous bool `json:"disallowAnonymous"`
@@ -25,6 +26,12 @@ func postNewPoll(c *gin.Context) {
 	var poll CreatePollRequest
 	if err := c.ShouldBindJSON(&poll); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+
+	// validate
+	if err := Validate.Struct(poll); err != nil {
+		c.AbortWithError(400, err.(validator.ValidationErrors))
 		return
 	}
 
