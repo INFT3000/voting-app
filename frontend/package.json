@@ -16,7 +16,6 @@
     "@sentry/nextjs": "^7.95.0",
     "axios": "^1.6.7",
     "billboard.js": "^3.10.3",
-    "http-proxy-middleware": "^2.0.6",
     "next": "14.0.4",
     "react": "^18",
     "react-dom": "^18",
