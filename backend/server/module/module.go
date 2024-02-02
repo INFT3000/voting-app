@@ -7,16 +7,21 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type QuickPollModuleConfig struct {
+	BasePath string
+}
+
 // QuickPollModule is used to bundle controllers, middleware, and providers together.
 type QuickPollModule struct {
 	Engine      *gin.Engine
 	Controllers []controller.QuickPollController
 	Middleware  []gin.HandlerFunc
+	Config      QuickPollModuleConfig
 }
 
 func (m QuickPollModule) SubscribeEndpoints(r *gin.Engine) {
 	for _, controller := range m.Controllers {
-		if err := controller.Initialize(r); err != nil {
+		if err := controller.Initialize(r, m.Config.BasePath); err != nil {
 			log.New(gin.DefaultWriter, "", log.LstdFlags).Println(err)
 		}
 	}

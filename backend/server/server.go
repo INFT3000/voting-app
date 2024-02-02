@@ -2,6 +2,8 @@ package server
 
 import (
 	"log"
+	"strings"
+	"time"
 
 	"github.com/INFT3000/voting-app/server/controller"
 	"github.com/INFT3000/voting-app/server/database"
@@ -9,6 +11,7 @@ import (
 	"github.com/INFT3000/voting-app/server/module"
 	"github.com/getsentry/sentry-go"
 	sentrygin "github.com/getsentry/sentry-go/gin"
+	"github.com/gin-contrib/cors"
 
 	"github.com/gin-gonic/gin"
 )
@@ -41,7 +44,7 @@ func createQuickPollApp() *gin.Engine {
 
 	// settings
 	g.SetTrustedProxies([]string{}) // currently no proxies
-	g.RedirectTrailingSlash = true  // /health/ -> /health
+	g.RedirectTrailingSlash = false  // /health/ -> /health
 	g.RedirectFixedPath = false     // tries to find the correct route. best disabled, we only expect frontend to use the correct routes.
 	g.ForwardedByClientIP = true    // X-Forwarded-For header
 	g.UseRawPath = false            // finds parameters in the raw path, not the decoded path. disabled because decoded seems safer?
@@ -53,6 +56,7 @@ func createQuickPollApp() *gin.Engine {
 		Controllers: []controller.QuickPollController{
 			*controller.HealthController,
 			*controller.UserController,
+			*controller.PollController,
 		},
 		Middleware: []gin.HandlerFunc{
 			gin.Logger(),
@@ -61,6 +65,20 @@ func createQuickPollApp() *gin.Engine {
 				Repanic: true, // gin.Recovery() already does this, but we want to capture panics in sentry.
 
 			}),
+			cors.New(cors.Config{
+				AllowOrigins:     []string{"*"},
+				AllowMethods:     []string{"POST", "GET", "OPTIONS", "PUT", "DELETE"},
+				AllowHeaders:     []string{"Accept, Baggage, Content-Type, Sentry-Trace, User-Agent"},
+				ExposeHeaders:    []string{"Content-Length"},
+				AllowCredentials: true,
+				AllowOriginFunc: func(origin string) bool {
+					return strings.Contains(origin, "localhost")
+				},
+				MaxAge: 12 * time.Hour,
+			}),
+		},
+		Config: module.QuickPollModuleConfig{
+			BasePath: "/api",
 		},
 	}
 	appModule.Initialize()

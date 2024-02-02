@@ -17,9 +17,9 @@ const (
 )
 
 type Endpoint struct {
-	Route       string
-	Method         HttpMethod
-	Handler        gin.HandlerFunc
+	Route   string
+	Method  HttpMethod
+	Handler gin.HandlerFunc
 }
 
 type QuickPollController struct {
@@ -29,10 +29,11 @@ type QuickPollController struct {
 	Endpoints  []Endpoint
 }
 
-func (c *QuickPollController) Initialize(r *gin.Engine) error {
+func (c *QuickPollController) Initialize(r *gin.Engine, basePath string) error {
 	log.New(gin.DefaultWriter, "", log.LstdFlags).Printf("Subscribing endpoints for controller %s", c.Name)
 	for _, endpoint := range c.Endpoints {
-		group := r.Group(c.Route, c.Middleware...)
+		route := basePath + c.Route
+		group := r.Group(route, c.Middleware...)
 		group.Handle(string(endpoint.Method), endpoint.Route, endpoint.Handler)
 	}
 	return nil
@@ -61,9 +62,9 @@ func New(name string, route string, endpoints *[]Endpoint, middleware *[]gin.Han
 // Creates a new Endpoint with the given subroute, method, and handler.
 func NewEndpoint(subRoute string, method HttpMethod, handler gin.HandlerFunc) *Endpoint {
 	return &Endpoint{
-		Route: subRoute,
-		Method:   method,
-		Handler:  handler,
+		Route:   subRoute,
+		Method:  method,
+		Handler: handler,
 	}
 	// todo: allow anonymous flag
 }

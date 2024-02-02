@@ -1,6 +1,7 @@
 "use client";
 
 import { ErrorMessage } from "@hookform/error-message";
+import axios from "axios";
 import Image from "next/image";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -10,14 +11,15 @@ import Button from "./Button";
 import IconButton from "./IconButton";
 import PollContainer from "./PollContainer";
 import ToggleSwitch from "./ToggleSwitch";
+import { QpAxios } from "@/helpers/quickpollaxios";
 
 interface ICreatePoll {
   title: string;
   options: string[];
-  isMultipleChoice: boolean;
   settings: {
+    isMultipleChoice: boolean;
     disallowAnonymous: boolean;
-    allowSameIp: boolean;
+    disallowSameIp: boolean;
   };
 }
 
@@ -74,9 +76,11 @@ export default function CreatePollWidget(): JSX.Element {
     setOptions(newOptions);
   };
 
-  const onSubmit = (payload: ICreatePoll): void => {
-    console.log(payload);
-    console.log("Submitted!");
+  const onSubmit = async (payload: ICreatePoll): Promise<void> => {
+    const response = await QpAxios.post("poll/", {
+      params: payload,
+    });
+    console.log(response);
   };
 
   return (
@@ -167,13 +171,13 @@ export default function CreatePollWidget(): JSX.Element {
         <div className="inputGroup my-[1vh] flex flex-row justify-between">
           <label htmlFor="multipleOptions" className="mb-[5px] text-primaryLight">Allow selection of multiple options</label>
           <ToggleSwitch
-            {...register("isMultipleChoice")}
+            {...register("settings.isMultipleChoice")}
           />
         </div>
         <div className="inputGroup my-[1vh] flex flex-row justify-between">
-          <label htmlFor="multipleVotes" className="mb-[5px] text-primaryLight">Allow multiple votes per IP address</label>
+          <label htmlFor="multipleVotes" className="mb-[5px] text-primaryLight">Disallow multiple votes per IP address</label>
           <ToggleSwitch
-            {...register("settings.allowSameIp")}
+            {...register("settings.disallowSameIp")}
           />
         </div>
         <div className="inputGroup flex flex-row justify-between">

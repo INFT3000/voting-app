@@ -25,12 +25,13 @@ type PollSettings struct {
 type Poll struct {
 	Id             uint   `json:"id" gorm:"primary_key"`
 	UserId         uint   `json:"owner_id"`
+	Uuid           string `json:"uuid"`
 	PollSettingsId uint   `json:"poll_settings_id"`
 	Question       string `json:"question"`
 
-	User     User         `json:"user"`
+	User         User         `json:"user"`
 	PollSettings PollSettings `json:"settings"`
-	Options  []Option     `json:"options"`
+	Options      []Option     `json:"options"`
 }
 
 type Option struct {
@@ -42,12 +43,12 @@ type Option struct {
 }
 
 type Vote struct {
-	Id       uint `json:"id" gorm:"primary_key"`
-	PollId   uint `json:"poll_id"`
-	VoterSessionId  uint `json:"voter_id"`
-	OptionId uint `json:"option_id"`
+	Id             uint `json:"id" gorm:"primary_key"`
+	PollId         uint `json:"poll_id"`
+	VoterSessionId uint `json:"voter_id"`
+	OptionId       uint `json:"option_id"`
 
-	Poll   Poll   `json:"poll"`
-	VoterSession  VoterSession   `json:"voter"`
-	Option Option `json:"option"`
+	Poll         Poll         `json:"poll"`
+	VoterSession VoterSession `json:"voter"`
+	Option       Option       `json:"option"`
 }
