@@ -14,6 +14,7 @@
   "dependencies": {
     "@hookform/error-message": "^2.0.1",
     "@sentry/nextjs": "^7.95.0",
+    "axios": "^1.6.7",
     "billboard.js": "^3.10.3",
     "next": "14.0.4",
     "react": "^18",
