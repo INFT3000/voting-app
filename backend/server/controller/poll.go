@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"net/http"
+
 	"github.com/INFT3000/voting-app/server/database"
 	"github.com/INFT3000/voting-app/server/database/models"
 	"github.com/gin-gonic/gin"
@@ -26,14 +28,14 @@ func postNewPoll(c *gin.Context) {
 	var poll CreatePollRequest
 	if err := c.ShouldBindJSON(&poll); err != nil {
 		c.Errors = append(c.Errors, err.(*gin.Error))
-		c.AbortWithError(400, err)
+		c.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
 	// validate
 	if err := Validate.Struct(poll); err != nil {
 		c.Errors = append(c.Errors, err.(*gin.Error))
-		c.AbortWithError(400, err.(validator.ValidationErrors))
+		c.AbortWithError(http.StatusBadRequest, err.(validator.ValidationErrors))
 		return
 	}
 
@@ -66,7 +68,7 @@ func postNewPoll(c *gin.Context) {
 	if err != nil {
 		c.Errors = append(c.Errors, err.(*gin.Error))
 		tx.Rollback()
-		c.AbortWithError(500, err)
+		c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 
@@ -76,7 +78,7 @@ func postNewPoll(c *gin.Context) {
 		Uuid: pollModel.Uuid,
 	}
 
-	c.JSON(201, gin.H{"response": res})
+	c.JSON(http.StatusCreated, gin.H{"response": res})
 }
 
 var PollController = New(
