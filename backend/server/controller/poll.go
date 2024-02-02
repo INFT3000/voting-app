@@ -2,16 +2,14 @@ package controller
 
 import "github.com/gin-gonic/gin"
 
-type PollRequestSettings struct {
-	IsMultipleChoice  bool `json:"isMultipleChoice"`
-	DisallowAnonymous bool `json:"disallowAnonymous"`
-	DisallowSameIp    bool `json:"disallowSameIp"`
-}
-
 type CreatePollRequest struct {
-	Title    string              `json:"title"`
-	Options  []string            `json:"options"`
-	Settings PollRequestSettings `json:"settings"`
+	Title    string   `json:"title"`
+	Options  []string `json:"options"`
+	Settings struct {
+		IsMultipleChoice  bool `json:"isMultipleChoice"`
+		DisallowAnonymous bool `json:"disallowAnonymous"`
+		DisallowSameIp    bool `json:"disallowSameIp"`
+	} `json:"settings"`
 }
 
 func postNewPoll(c *gin.Context) {

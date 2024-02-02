@@ -77,9 +77,7 @@ export default function CreatePollWidget(): JSX.Element {
   };
 
   const onSubmit = async (payload: ICreatePoll): Promise<void> => {
-    const response = await QpAxios.post("poll/", {
-      params: payload,
-    });
+    const response = await QpAxios.post("poll/", payload);
     console.log(response);
   };
 
