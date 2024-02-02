@@ -25,12 +25,14 @@ type CreatePollResponse struct {
 func postNewPoll(c *gin.Context) {
 	var poll CreatePollRequest
 	if err := c.ShouldBindJSON(&poll); err != nil {
+		c.Errors = append(c.Errors, err.(*gin.Error))
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
 	// validate
 	if err := Validate.Struct(poll); err != nil {
+		c.Errors = append(c.Errors, err.(*gin.Error))
 		c.AbortWithError(400, err.(validator.ValidationErrors))
 		return
 	}
@@ -62,6 +64,8 @@ func postNewPoll(c *gin.Context) {
 	err := tx.Model(&pollModel).Association("Options").Append(options)
 
 	if err != nil {
+		c.Errors = append(c.Errors, err.(*gin.Error))
+		tx.Rollback()
 		c.AbortWithError(500, err)
 		return
 	}
