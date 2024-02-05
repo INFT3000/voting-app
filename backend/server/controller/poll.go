@@ -102,8 +102,9 @@ func getPoll(c *gin.Context) {
 	result := database.Context.Preload("Options").Preload("PollSettings").First(&poll, "uuid = ?", uuid)
 
 	if result.Error != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Poll not found"})
-		return
+		c.Errors = append(c.Errors, result.Error.(*gin.Error)) 
+		c.AbortWithError(http.StatusNotFound, result.Error) // Change on build to "Poll not found."
+		return 
 	}
 
 	response := PollResponse{
