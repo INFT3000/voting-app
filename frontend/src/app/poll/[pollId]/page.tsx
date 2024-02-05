@@ -1,6 +1,4 @@
-import axios from "axios";
-import { useRouter } from "next/router";
-
+import { QpAxios } from "@/helpers/quickpollaxios";
 
 type Poll = {
   uuid: string;
@@ -11,20 +9,17 @@ type Poll = {
     disallow_anonymous: boolean;
     disallow_same_ip: boolean;
   }
-  // probably will want to add more fields like the votes to each options, im not sure
 };
 
-
-async function getPollByUuid(pollId: string) {
-  const res = await axios.get(`http://localhost:8080/api/poll/${pollId}`);
-  const poll: Poll = res.data.poll;
+async function getPollByUuid(pollId: string): Promise<Poll> {
+  const res = await QpAxios.get<{ poll: Poll }>(`poll/${pollId}`);
+  const { poll } = res.data;
   return poll;
 }
 
-export default async function Page({params}) {
-  const pollId = params.pollId;
-  const poll = await getPollByUuid(pollId as string); 
-  console.log(poll.title);
+export default async function Page({ params }: { params: { pollId: string } }): Promise<JSX.Element> {
+  const { pollId } = params;
+  const poll = await getPollByUuid(pollId as string);
   console.log(poll);
 
   return (
