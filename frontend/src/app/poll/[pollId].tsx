@@ -4,9 +4,17 @@ import axios from 'axios';
 export async function getServerSideProps(context) {
   const { pollId } = context.params;
 
-  const poll = async () => {
-    // fetch poll from backend
-
+  const poll = async (uuid: string) => {
+    const url = `http://localhost:8080/poll/${uuid}`;
+  
+    try {
+      const response = await axios.get(url);
+      console.log('Poll details:', response.data);
+      // Handle success (e.g., display the poll details)
+    } catch (error) {
+      console.error('Error retrieving poll:', error);
+      // Handle error (e.g., display an error message)
+    }
   };
 
 
