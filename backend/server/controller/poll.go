@@ -8,8 +8,20 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
-	
 )
+
+type SettingsReponse struct {
+	IsMultipleChoice  bool `json:"isMultipleChoice"`
+	DisallowAnonymous bool `json:"disallowAnonymous"`
+	DisallowSameIp    bool `json:"disallowSameIp"`
+}
+
+type PollResponse struct {
+	Uuid     string   `json:"uuid"`
+	Title    string   `json:"title"`
+	Options  []string `json:"options"`
+	Settings SettingsReponse `json:"settings"`
+}
 
 type CreatePollRequest struct {
 	Title    string   `json:"title" validate:"required,gte=2"`
@@ -83,9 +95,8 @@ func postNewPoll(c *gin.Context) {
 }
 
 func getPoll(c *gin.Context) {
-	
 
-	uuid := c.Param("uuid") 
+	uuid := c.Param("uuid")
 
 	var poll models.Poll
 	result := database.Context.Preload("Options").Preload("PollSettings").First(&poll, "uuid = ?", uuid)
@@ -95,17 +106,7 @@ func getPoll(c *gin.Context) {
 		return
 	}
 
-	
-	response := struct {
-		Uuid      string   `json:"uuid"`
-		Title     string   `json:"title"`
-		Options   []string `json:"options"`
-		Settings  struct {
-			IsMultipleChoice  bool `json:"isMultipleChoice"`
-			DisallowAnonymous bool `json:"disallowAnonymous"`
-			DisallowSameIp    bool `json:"disallowSameIp"`
-		} `json:"settings"`
-	}{
+	response := PollResponse{
 		Uuid:  poll.Uuid,
 		Title: poll.Question,
 		Options: func() []string {
@@ -115,11 +116,7 @@ func getPoll(c *gin.Context) {
 			}
 			return options
 		}(),
-		Settings: struct {
-			IsMultipleChoice  bool `json:"isMultipleChoice"`
-			DisallowAnonymous bool `json:"disallowAnonymous"`
-			DisallowSameIp    bool `json:"disallowSameIp"`
-		}{
+		Settings: SettingsReponse{
 			IsMultipleChoice:  poll.PollSettings.MultipleChoice,
 			DisallowAnonymous: poll.PollSettings.DisallowAnonymous,
 			DisallowSameIp:    poll.PollSettings.DisallowSameIp,
