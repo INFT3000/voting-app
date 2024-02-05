@@ -7,7 +7,7 @@ import Navbar from "./components/Navbar";
 
 export default function Home(): JSX.Element {
   return (
-    <main className="flex flex-col md:flex-row">
+    <main className="flex flex-col items-center justify-center md:flex-row">
   <Navbar />
   <section className="flex flex-col md:flex-row items-center justify-center">
     <div className="headerCont text-center md:text-left md:w-1/2 pt-10">
