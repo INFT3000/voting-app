@@ -13,7 +13,7 @@ type Poll = {
 
 async function getPollByUuid(pollId: string) {
 
-const res = await axios.get(`http://localhost:8080/poll/${pollId}`);
+const res = await axios.get(`http://localhost:8080/api/poll/${pollId}`);
 const poll: Poll = res.data;
 
 return poll;

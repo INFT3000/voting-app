@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/INFT3000/voting-app/server/database"
@@ -104,6 +105,7 @@ func getPoll(c *gin.Context) {
 	if result.Error != nil {
 		c.Errors = append(c.Errors, result.Error.(*gin.Error)) 
 		c.AbortWithError(http.StatusNotFound, result.Error) // Change on build to "Poll not found."
+		fmt.Println(result.Error)
 		return 
 	}
 
