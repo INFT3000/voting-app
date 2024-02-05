@@ -1,6 +1,5 @@
-import axios from 'axios';
-
-import { useRouter } from 'next/router';
+import axios from "axios";
+import { useRouter } from "next/router";
 
 
 type Poll = {
@@ -17,7 +16,6 @@ type Poll = {
 
 
 async function getPollByUuid(pollId: string) {
-
   const res = await axios.get(`http://localhost:8080/api/poll/${pollId}`);
   const poll: Poll = res.data.poll;
   return poll;
