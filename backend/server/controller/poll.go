@@ -11,9 +11,9 @@ import (
 )
 
 type SettingsReponse struct {
-	IsMultipleChoice  bool `json:"isMultipleChoice"`
-	DisallowAnonymous bool `json:"disallowAnonymous"`
-	DisallowSameIp    bool `json:"disallowSameIp"`
+	IsMultipleChoice  bool `json:"is_multiple_choice"`
+	DisallowAnonymous bool `json:"disallow_anonymous"`
+	DisallowSameIp    bool `json:"disallow_same_ip"`
 }
 
 type PollResponse struct {
