@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/INFT3000/voting-app/server/database"
@@ -9,6 +10,19 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
 )
+
+type SettingsReponse struct {
+	IsMultipleChoice  bool `json:"is_multiple_choice"`
+	DisallowAnonymous bool `json:"disallow_anonymous"`
+	DisallowSameIp    bool `json:"disallow_same_ip"`
+}
+
+type PollResponse struct {
+	Uuid     string   `json:"uuid"`
+	Title    string   `json:"title"`
+	Options  []string `json:"options"`
+	Settings SettingsReponse `json:"settings"`
+}
 
 type CreatePollRequest struct {
 	Title    string   `json:"title" validate:"required,gte=2"`
@@ -81,11 +95,46 @@ func postNewPoll(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"response": res})
 }
 
+func getPoll(c *gin.Context) {
+
+	uuid := c.Param("uuid")
+
+	var poll models.Poll
+	result := database.Context.Preload("Options").Preload("PollSettings").First(&poll, "uuid = ?", uuid)
+
+	if result.Error != nil {
+		c.Errors = append(c.Errors, result.Error.(*gin.Error)) 
+		c.AbortWithError(http.StatusNotFound, result.Error) // Change on build to "Poll not found."
+		fmt.Println(result.Error)
+		return 
+	}
+
+	response := PollResponse{
+		Uuid:  poll.Uuid,
+		Title: poll.Question,
+		Options: func() []string {
+			var options []string
+			for _, option := range poll.Options {
+				options = append(options, option.Text)
+			}
+			return options
+		}(),
+		Settings: SettingsReponse{
+			IsMultipleChoice:  poll.PollSettings.MultipleChoice,
+			DisallowAnonymous: poll.PollSettings.DisallowAnonymous,
+			DisallowSameIp:    poll.PollSettings.DisallowSameIp,
+		},
+	}
+
+	c.JSON(http.StatusOK, gin.H{"poll": response})
+}
+
 var PollController = New(
 	"PollController",
 	"/poll",
 	&[]Endpoint{
 		*NewEndpoint("/", POST, postNewPoll),
+		*NewEndpoint("/:uuid", GET, getPoll),
 	},
 	nil,
 )
