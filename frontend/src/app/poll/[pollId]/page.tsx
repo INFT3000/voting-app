@@ -2,10 +2,11 @@
 
 import { useForm } from "react-hook-form";
 
+import { AsyncWrapper } from "@/app/components/AsyncWrapper";
 import Button from "@/app/components/Button";
 import Navbar from "@/app/components/Navbar";
 import PollContainer from "@/app/components/PollContainer";
-import { QpAxios } from "@/helpers/quickpollaxios";
+import useQpAxios from "@/helpers/quickpollaxios";
 
 type Poll = {
   uuid: string;
@@ -40,39 +41,46 @@ function getPollByUuid(pollId: string): Poll {
 
 export default function Page({ params }: { params: { pollId: string } }): JSX.Element {
   const { pollId } = params;
-  const poll = getPollByUuid(pollId as string);
-  const { register, handleSubmit } = useForm<Option>();
-  console.log(poll);
 
-  const onSubmit = async (data: Option): Promise<void> => {
-    console.log(data);
+  const [pollReq, fetchTheThing] = useQpAxios<{ poll: Poll }>({
+    url: `poll/${pollId}`,
+    method: "GET",
+  });
+  const { data } = pollReq;
+
+  const { register, handleSubmit } = useForm<Option>();
+
+  const onSubmit = async (payload: Option): Promise<void> => {
+    console.log(payload);
   };
 
   return (
     <main className="flex min-h-screen flex-col justify-center">
       <Navbar />
       <PollContainer>
-        <form className="flex w-[100%] flex-col justify-start gap-[45px]" onSubmit={handleSubmit(onSubmit)}>
-          <div>
-            <h1 className="text-3xl font-bold">{poll.title}</h1>
-            <p className="text-secondaryGrey">By Anonymous</p>
-          </div>
-          <div className="flex flex-col gap-[20px]">
-            <p>Make a choice:</p>
+        <AsyncWrapper requests={[pollReq]}>
+          <form className="flex w-[100%] flex-col justify-start gap-[45px]" onSubmit={handleSubmit(onSubmit)}>
             <div>
-              {poll.options.map((option) => (
-                <div className="mb-3 flex gap-[12px] text-secondaryGrey" key={option}>
-                  <input type={poll.settings.is_multiple_choice ? "checkbox" : "radio"} id={option} name="option" value={option} />
-                  <label htmlFor={option}>{option}</label>
-                </div>
-              ))}
+              <h1 className="text-3xl font-bold">{data?.poll.title}</h1>
+              <p className="text-secondaryGrey">By Anonymous</p>
             </div>
-          </div>
-          <div className="flex gap-[18px]">
-            <Button theme="primary" type="submit">Vote</Button>
-            <Button theme="secondary">Results</Button>
-          </div>
-        </form>
+            <div className="flex flex-col gap-[20px]">
+              <p>Make a choice:</p>
+              <div>
+                {data?.poll.options.map((option) => (
+                  <div className="mb-3 flex gap-[12px] text-secondaryGrey" key={option}>
+                    <input type={data.poll.settings.is_multiple_choice ? "checkbox" : "radio"} id={option} name="option" value={option} />
+                    <label htmlFor={option}>{option}</label>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="flex gap-[18px]">
+              <Button theme="primary" type="submit">Vote</Button>
+              <Button theme="secondary">Results</Button>
+            </div>
+          </form>
+        </AsyncWrapper>
       </PollContainer>
     </main>
   );
