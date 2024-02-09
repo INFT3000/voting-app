@@ -1,4 +1,5 @@
 import axios from "axios";
+import useAxios, { configure } from "axios-hooks";
 
 export const QpAxios = axios.create({
   baseURL: "http://localhost:8080/api/",
@@ -8,3 +9,11 @@ export const QpAxios = axios.create({
     // 'Authorization': 'token <your-token-here> -- https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token'
   },
 });
+
+configure({
+  axios: QpAxios,
+});
+
+const useQpAxios = useAxios;
+
+export default useQpAxios;
