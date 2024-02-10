@@ -7,34 +7,31 @@ import Navbar from "./components/Navbar";
 
 export default function Home(): JSX.Element {
   return (
-    <main className="flex flex-col items-center justify-center md:flex-row">
-  <Navbar />
-  <section className="flex flex-col md:flex-row items-center justify-center">
-    <div className="headerCont text-center md:text-left md:w-1/2 pt-10">
-      <h1 className="text-white text-3xl md:text-5xl mb-4">
-        Create a Poll <br />
-        <span className="text-primaryBlue">in seconds</span>.
-      </h1>
-      <p className="text-primaryLight text-sm md:text-base">
-        ouga bouga
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec urna ex,
-        porttitor egestas vestibulum ut, tincidunt pellentesque erat. In blandit
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-      </p>
-      <div className="btnCont mt-4 md:mt-6">
+    <main className="flex flex-col items-center justify-center sm:flex-row md:flex-row">
+      <Navbar />
+      <div className="headerCont flex flex-col p-20">
+        <h1 className="text-6xl text-white">
+          Create a Poll <br />
+          <span className="text-primaryBlue">in seconds</span>.
+        </h1>
+        <p className="text-left text-primaryLight">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec urna ex,
+          porttitor egestas vestibulum ut, tincidunt pellentesque erat. In blandit
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        </p>
+      </div>
+      <div className="btnCont flex flex-row ">
         <Button theme="primary">
           <Link href="/signup">Login</Link>
         </Button>
-        <Button theme="secondary" className="ml-2 md:ml-4">
+        <Button theme="secondary">
           <Link href="/signup">Signup</Link>
         </Button>
       </div>
-    </div>
-    <div className="pollCreationCont md:w-1/2 pt-[100px] pl-[50px]">
-      <CreatePollWidget />
-    </div>
-  </section>
-</main>
+      <div className="pollCreationCont pt-[100px] md:w-1/2">
+        <CreatePollWidget />
+      </div>
+    </main>
 
   );
 }
