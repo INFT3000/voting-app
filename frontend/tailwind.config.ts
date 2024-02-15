@@ -26,6 +26,7 @@ const config: Config = {
         'secondaryLight': '#737276',
         'grey': '#B4BFD2',
         'white': '#FFFFFF',
+        'hoverBlue': '#5b9dff',
       },
       screens: {
         'xs': '475px',
