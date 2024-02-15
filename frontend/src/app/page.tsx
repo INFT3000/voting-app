@@ -7,7 +7,7 @@ import Navbar from "./components/Navbar";
 
 export default function Home(): JSX.Element {
   return (
-    <main className="flex items-center justify-center">
+    <main className="flex flex-col items-center justify-center lg:flex-row">
       <Navbar />
       <div className="header w-full lg:w-1/2">
         <div className="headerCont flex flex-col p-20">
@@ -22,7 +22,7 @@ export default function Home(): JSX.Element {
           </p>
         </div>
 
-        <div className="buttonCont flex flex-row items-center justify-center">
+        <div className="buttonCont flex flex-row items-center justify-center lg:items-start">
           <Button theme="primary">
             <Link href="/signup">Login</Link>
           </Button>
