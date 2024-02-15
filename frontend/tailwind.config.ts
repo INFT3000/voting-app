@@ -14,6 +14,7 @@ const config: Config = {
       },
       boxShadow: {
         'blueTop': '0px -4px 0px 0px #8BB9FE;',
+        'glow': '0 0 10px rgba(139, 185, 254, 0.5)', 
       },
       colors: {
         'primaryBlue': '#8BB9FE',

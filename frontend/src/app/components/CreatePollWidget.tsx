@@ -101,7 +101,7 @@ export default function CreatePollWidget(): JSX.Element {
             })}
             id="title"
             placeholder="Type your question here."
-            className="mb-[5px] rounded-lg bg-tetraDark p-[10px] text-white outline-none focus:border-[1px] focus:border-primaryBlue"
+            className="mb-[5px] rounded-lg bg-tetraDark p-[10px] text-white outline-none border-[1px] border-transparent focus:border-primaryBlue"
           />
           <ErrorMessage
             errors={errors}

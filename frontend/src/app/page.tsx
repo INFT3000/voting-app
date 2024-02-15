@@ -11,11 +11,9 @@ export default function Home(): JSX.Element {
       <Navbar />
       <section className="flex h-[100vh] flex-col items-center justify-between xs:flex-col sm:flex-row md:flex-row lg:flex-row">
         <div className="headerCont w-[40%]">
-          <h1 className="text-left text-6xl font-bold text-white">Create a Poll <br /><span className="text-primaryBlue">in seconds</span>.</h1>
+          <h1 className="text-left text-5xl font-bold text-white"><span className="text-primaryBlue">Make a poll in less time</span> than it takes to read this</h1>
           <p className="my-[20px] text-left text-primaryLight">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec urna ex,
-            porttitor egestas vestibulum ut, tincidunt pellentesque erat. In blandit
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          Seeking fast feedback or curious about opinions? Quick Poll makes creating straw polls a breeze. Dive in, get insights, and see what your audience thinks today!
           </p>
           <div className="btnCont flex w-[325px] flex-row justify-between">
             <Button theme="primary">
