@@ -1,5 +1,6 @@
 "use client";
 
+import { ErrorMessage } from "@hookform/error-message";
 import { useForm } from "react-hook-form";
 
 import { AsyncWrapper } from "@/app/components/AsyncWrapper";
@@ -19,39 +20,60 @@ type Poll = {
   }
 };
 
-interface Option {
-  option: string;
+interface Selection {
+  options: string[];
 }
 
-function getPollByUuid(pollId: string): Poll {
-  // const res = await QpAxios.get<{ poll: Poll }>(`poll/${pollId}`);
-  // const { poll } = res.data;
-  const poll: Poll = {
-    uuid: "123",
-    title: "Title",
-    options: ["Option 1", "Option 2"],
-    settings: {
-      is_multiple_choice: true,
-      disallow_anonymous: false,
-      disallow_same_ip: false,
-    },
-  };
-  return poll;
+function ErrorText({ message }: { message: string }): JSX.Element {
+  return (
+    <p className="text-[#FF0000]">{message}</p>
+  );
 }
 
 export default function Page({ params }: { params: { pollId: string } }): JSX.Element {
   const { pollId } = params;
 
-  const [pollReq, fetchTheThing] = useQpAxios<{ poll: Poll }>({
+  const [pollReq] = useQpAxios<{ poll: Poll }>({
     url: `poll/${pollId}`,
     method: "GET",
   });
   const { data } = pollReq;
 
-  const { register, handleSubmit } = useForm<Option>();
+  const {
+    register, handleSubmit, setError, clearErrors, formState: { errors },
+  } = useForm<Selection>();
 
-  const onSubmit = async (payload: Option): Promise<void> => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    clearErrors("options");
+    // TO-DO: RADIO BUTTON ISSUE
+  };
+
+  const onSubmit = async (payload: Selection): Promise<void> => {
     console.log(payload);
+    const options = payload.options.filter((option) => option !== null && option !== undefined);
+    console.log(options);
+    if (options.length === 0) {
+      setError("options", {
+        type: "manual",
+        message: "Please select an option",
+      });
+      return;
+    }
+    if (options.length > 1 && !data!.poll.settings.is_multiple_choice) {
+      setError("options", {
+        type: "manual",
+        message: "You can only select one option",
+      });
+      return;
+    }
+    if (options.length > data!.poll.options.length) {
+      setError("options", {
+        type: "manual",
+        message: "You have selected more options than available",
+      });
+      return;
+    }
+    clearErrors("options");
   };
 
   return (
@@ -67,14 +89,20 @@ export default function Page({ params }: { params: { pollId: string } }): JSX.El
             <div className="flex flex-col gap-[20px]">
               <p>Make a choice:</p>
               <div>
-                {data?.poll.options.map((option) => (
+                {data?.poll.options.map((option, index) => (
                   <div className="mb-3 flex gap-[12px] text-secondaryGrey" key={option}>
-                    <input type={data.poll.settings.is_multiple_choice ? "checkbox" : "radio"} id={option} name="option" value={option} />
+                    <input
+                      type={data.poll.settings.is_multiple_choice ? "checkbox" : "radio"}
+                      id={option}
+                      value={option}
+                      {...register(`options.${index}`, { onChange: handleChange })}
+                    />
                     <label htmlFor={option}>{option}</label>
                   </div>
                 ))}
               </div>
             </div>
+            <ErrorMessage errors={errors} name="options" render={({ message }) => <ErrorText message={message} />} />
             <div className="flex gap-[18px]">
               <Button theme="primary" type="submit">Vote</Button>
               <Button theme="secondary">Results</Button>
