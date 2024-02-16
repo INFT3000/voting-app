@@ -90,8 +90,6 @@ export default function CreatePollWidget(): JSX.Element {
     console.log(response);
   };
 
-
-
   return (
     <PollContainer>
       <form className="w-[100%]" onSubmit={handleSubmit(onSubmit)}>
