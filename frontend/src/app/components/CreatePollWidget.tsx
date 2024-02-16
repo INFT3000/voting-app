@@ -159,7 +159,7 @@ export default function CreatePollWidget(): JSX.Element {
               type="button"
               icon={<AddIcon />}
               onClick={handleAddOption}
-              className="max-w-[30vw] justify-center px-[3px] text-[14px] text-grey md:w-[15vw] md:text-[12px] lg:w-[10vw] lg:text-[13px]"
+              className=" justify-center px-[3px] text-[14px] text-grey "
             >
               Add Option
             </IconButton>
@@ -184,7 +184,7 @@ export default function CreatePollWidget(): JSX.Element {
             {...register("settings.disallowAnonymous")}
           />
         </div>
-        <Button theme="primary" type="submit" className="my-[1vh] w-[100%]">Create Poll</Button>
+        <Button theme="primary" type="submit" className="w-[100%]">Create Poll</Button>
       </form>
     </PollContainer>
   );
