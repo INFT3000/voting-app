@@ -46,7 +46,6 @@ type poll struct {
 
 type option struct {
 	Id     uint
-	Uuid   string
 	PollId uint
 	Text   string
 
