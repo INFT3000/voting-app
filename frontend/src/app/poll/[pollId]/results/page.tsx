@@ -1,5 +1,10 @@
 "use client";
 
+import bb, {
+  Chart, ChartOptions, bar, pie,
+} from "billboard.js";
+import BillboardChart from "react-billboardjs";
+
 import { AsyncWrapper } from "@/app/components/AsyncWrapper";
 import Navbar from "@/app/components/Navbar";
 import PollContainer from "@/app/components/PollContainer";
@@ -13,6 +18,22 @@ type ResultsResponse = {
   }[];
 };
 
+function createChart(results?: ResultsResponse["results"]): ChartOptions {
+  if (!results) {
+    return {
+      data: {
+        columns: [],
+      },
+    };
+  }
+  return {
+    data: {
+      type: "pie",
+      columns: results.map((result) => [result.option, result.votes]),
+    },
+  };
+}
+
 export default function Page({ params }: { params: { pollId: string } }): JSX.Element {
   const [resultsReq] = useQpAxios<{ results: ResultsResponse }>({
     url: `poll/${params.pollId}/results`,
@@ -20,20 +41,15 @@ export default function Page({ params }: { params: { pollId: string } }): JSX.El
   });
 
   return (
-    <main className="flex min-h-screen flex-col justify-center">
+    <main className="relative flex min-h-screen flex-col items-center justify-center">
       <Navbar />
-
       <AsyncWrapper requests={[resultsReq]}>
-        <PollContainer>
-          <h1>Results</h1>
-          <ul>
-            {resultsReq.data?.results.results.map((result) => (
-              <li key={result.option}>
-                {result.option}: {result.votes}
-              </li>
-            ))}
-          </ul>
-        </PollContainer>
+        <div className="min-w-[800px]">
+          <PollContainer>
+            <h1>Results</h1>
+            <BillboardChart {...createChart(resultsReq.data?.results.results)} />
+          </PollContainer>
+        </div>
       </AsyncWrapper>
     </main>
   );
