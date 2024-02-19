@@ -26,7 +26,7 @@ type Poll = {
 };
 
 interface Selection {
-  options: Option[];
+  options: string[];
 }
 
 function ErrorText({ message }: { message: string }): JSX.Element {
@@ -78,7 +78,7 @@ export default function Page({ params }: { params: { pollId: string } }): JSX.El
     }
     clearErrors("options");
     await QpAxios.post(`poll/${pollId}/vote`, {
-      option: options.at(0)?.uuid,
+      option: options.at(0),
     });
   };
 
@@ -100,7 +100,7 @@ export default function Page({ params }: { params: { pollId: string } }): JSX.El
                     <input
                       type={data.poll.settings.is_multiple_choice ? "checkbox" : "radio"}
                       id={option.uuid}
-                      value={option.text}
+                      value={option.uuid}
                       {...register(`options.${index}`, { onChange: handleChange })}
                     />
                     <label htmlFor={option.uuid}>{option.text}</label>

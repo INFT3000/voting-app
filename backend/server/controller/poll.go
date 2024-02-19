@@ -64,7 +64,6 @@ func postNewPoll(c *gin.Context) {
 
 	// validate
 	if err := Validate.Struct(poll); err != nil {
-		c.Errors = append(c.Errors, err.(*gin.Error))
 		c.AbortWithError(http.StatusBadRequest, err.(validator.ValidationErrors))
 		return
 	}
@@ -96,7 +95,6 @@ func postNewPoll(c *gin.Context) {
 	err := tx.Model(&pollModel).Association("Options").Append(options)
 
 	if err != nil {
-		c.Errors = append(c.Errors, err.(*gin.Error))
 		tx.Rollback()
 		c.AbortWithError(http.StatusInternalServerError, err)
 		return
@@ -125,7 +123,6 @@ func postVote(c *gin.Context) {
 	pollRes := database.Context.Preload("Options").Preload("PollSettings").First(&poll, "uuid = ?", uuid)
 
 	if pollRes.Error != nil {
-		c.Errors = append(c.Errors, pollRes.Error.(*gin.Error))
 		c.AbortWithError(http.StatusNotFound, pollRes.Error) // Change on build to "Poll not found."
 		fmt.Println(pollRes.Error)
 		return
@@ -184,7 +181,6 @@ func getPoll(c *gin.Context) {
 	result := database.Context.Preload("Options").Preload("PollSettings").First(&poll, "uuid = ?", uuid)
 
 	if result.Error != nil {
-		c.Errors = append(c.Errors, result.Error.(*gin.Error))
 		c.AbortWithError(http.StatusNotFound, result.Error) // Change on build to "Poll not found."
 		fmt.Println(result.Error)
 		return
