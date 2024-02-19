@@ -1,6 +1,7 @@
 "use client";
 
 import { ErrorMessage } from "@hookform/error-message";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
 
 import { AsyncWrapper } from "@/app/components/AsyncWrapper";
@@ -111,7 +112,11 @@ export default function Page({ params }: { params: { pollId: string } }): JSX.El
             <ErrorMessage errors={errors} name="options" render={({ message }) => <ErrorText message={message} />} />
             <div className="flex gap-[18px]">
               <Button theme="primary" type="submit">Vote</Button>
-              <Button theme="secondary">Results</Button>
+              <Button theme="secondary">
+                <Link href={`/poll/${pollId}/results`}>
+                  View Results
+                </Link>
+              </Button>
             </div>
           </form>
         </AsyncWrapper>
