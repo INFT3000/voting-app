@@ -54,6 +54,14 @@ type CreatePollResponse struct {
 	Uuid string `json:"uuid"`
 }
 
+type ResultsResponse struct {
+	PollUuid string `json:"pollUuid"`
+	Results  []struct {
+		Option string `json:"option"`
+		Votes  int    `json:"votes"`
+	} `json:"results"`
+}
+
 func postNewPoll(c *gin.Context) {
 	var poll CreatePollRequest
 	if err := c.ShouldBindJSON(&poll); err != nil {
@@ -209,6 +217,45 @@ func getPoll(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"poll": response})
 }
 
+func getResults(c *gin.Context) {
+	uuid := c.Param("uuid")
+
+	var poll models.Poll
+	result := database.Context.Preload("Options").Preload("PollSettings").First(&poll, "uuid = ?", uuid)
+
+	if result.Error != nil {
+		c.AbortWithError(http.StatusNotFound, result.Error) // Change on build to "Poll not found."
+		fmt.Println(result.Error)
+		return
+	}
+
+	response := ResultsResponse{
+		PollUuid: poll.Uuid,
+		Results: func() []struct {
+			Option string `json:"option"`
+			Votes  int    `json:"votes"`
+		} {
+			var results []struct {
+				Option string `json:"option"`
+				Votes  int    `json:"votes"`
+			}
+			for _, option := range poll.Options {
+				count := database.Context.Model(&option).Association("Votes").Count()
+				results = append(results, struct {
+					Option string `json:"option"`
+					Votes  int    `json:"votes"`
+				}{
+					Option: option.Text,
+					Votes:  int(count),
+				})
+			}
+			return results
+		}(),
+	}
+
+	c.JSON(http.StatusOK, gin.H{"results": response})
+}
+
 var PollController = New(
 	"PollController",
 	"/poll",
@@ -216,6 +263,7 @@ var PollController = New(
 		*NewEndpoint("/", POST, postNewPoll),
 		*NewEndpoint("/:uuid/vote", POST, postVote),
 		*NewEndpoint("/:uuid", GET, getPoll),
+		*NewEndpoint("/:uuid/results", GET, getResults),
 	},
 	nil,
 )
