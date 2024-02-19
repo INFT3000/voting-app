@@ -7,7 +7,7 @@ import { AsyncWrapper } from "@/app/components/AsyncWrapper";
 import Button from "@/app/components/Button";
 import Navbar from "@/app/components/Navbar";
 import PollContainer from "@/app/components/PollContainer";
-import useQpAxios from "@/helpers/quickpollaxios";
+import useQpAxios, { QpAxios } from "@/helpers/quickpollaxios";
 
 type Poll = {
   uuid: string;
@@ -49,9 +49,7 @@ export default function Page({ params }: { params: { pollId: string } }): JSX.El
   };
 
   const onSubmit = async (payload: Selection): Promise<void> => {
-    console.log(payload);
     const options = payload.options.filter((option) => option !== null && option !== undefined);
-    console.log(options);
     if (options.length === 0) {
       setError("options", {
         type: "manual",
@@ -74,6 +72,9 @@ export default function Page({ params }: { params: { pollId: string } }): JSX.El
       return;
     }
     clearErrors("options");
+    await QpAxios.post(`poll/${pollId}/vote`, {
+      option: options.at(0),
+    });
   };
 
   return (

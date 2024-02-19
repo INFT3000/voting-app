@@ -36,8 +36,7 @@ type CreatePollRequest struct {
 }
 
 type VoteRequest struct {
-	PollUuid string `json:"pollUuid" validate:"required"`
-	Option   string `json:"option" validate:"required,gte=2"`
+	Option string `json:"option" validate:"required,gte=2"`
 }
 
 type VoteResponse struct {
@@ -115,7 +114,7 @@ func postVote(c *gin.Context) {
 		return
 	}
 
-	uuid := voteReq.PollUuid
+	uuid := c.Param("uuid")
 
 	var poll models.Poll
 	pollRes := database.Context.Preload("Options").Preload("PollSettings").First(&poll, "uuid = ?", uuid)
@@ -132,6 +131,13 @@ func postVote(c *gin.Context) {
 	}
 
 	selectedOptionId := 0
+
+	for _, option := range poll.Options {
+		if option.Text == voteReq.Option {
+			selectedOptionId = int(option.Id)
+		}
+	}
+
 	if selectedOptionId == 0 {
 		err := &gin.Error{
 			Err:  errors.New("option not found"),
@@ -204,7 +210,7 @@ var PollController = New(
 	"/poll",
 	&[]Endpoint{
 		*NewEndpoint("/", POST, postNewPoll),
-		*NewEndpoint("/vote", POST, postVote),
+		*NewEndpoint("/:uuid/vote", POST, postVote),
 		*NewEndpoint("/:uuid", GET, getPoll),
 	},
 	nil,
