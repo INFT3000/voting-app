@@ -18,10 +18,15 @@ type SettingsResponse struct {
 	DisallowSameIp    bool `json:"disallow_same_ip"`
 }
 
+type OptionResponse struct {
+	Uuid string `json:"uuid"`
+	Text string `json:"text"`
+}
+
 type PollResponse struct {
 	Uuid     string           `json:"uuid"`
 	Title    string           `json:"title"`
-	Options  []string         `json:"options"`
+	Options  []OptionResponse `json:"options"`
 	Settings SettingsResponse `json:"settings"`
 }
 
@@ -86,7 +91,7 @@ func postNewPoll(c *gin.Context) {
 	// Options
 	var options []models.Option
 	for _, option := range poll.Options {
-		options = append(options, models.Option{Text: option})
+		options = append(options, models.Option{Text: option, Uuid: uuid.New().String()})
 	}
 	err := tx.Model(&pollModel).Association("Options").Append(options)
 
@@ -133,7 +138,7 @@ func postVote(c *gin.Context) {
 	selectedOptionId := 0
 
 	for _, option := range poll.Options {
-		if option.Text == voteReq.Option {
+		if option.Uuid == voteReq.Option {
 			selectedOptionId = int(option.Id)
 		}
 	}
@@ -188,10 +193,13 @@ func getPoll(c *gin.Context) {
 	response := PollResponse{
 		Uuid:  poll.Uuid,
 		Title: poll.Question,
-		Options: func() []string {
-			var options []string
+		Options: func() []OptionResponse {
+			var options []OptionResponse
 			for _, option := range poll.Options {
-				options = append(options, option.Text)
+				options = append(options, OptionResponse{
+					Uuid: option.Uuid,
+					Text: option.Text,
+				})
 			}
 			return options
 		}(),

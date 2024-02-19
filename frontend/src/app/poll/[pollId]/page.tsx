@@ -9,10 +9,15 @@ import Navbar from "@/app/components/Navbar";
 import PollContainer from "@/app/components/PollContainer";
 import useQpAxios, { QpAxios } from "@/helpers/quickpollaxios";
 
+type Option = {
+  text: string;
+  uuid: string;
+};
+
 type Poll = {
   uuid: string;
   title: string;
-  options: string[];
+  options: Option[];
   settings: {
     is_multiple_choice: boolean;
     disallow_anonymous: boolean;
@@ -21,7 +26,7 @@ type Poll = {
 };
 
 interface Selection {
-  options: string[];
+  options: Option[];
 }
 
 function ErrorText({ message }: { message: string }): JSX.Element {
@@ -73,7 +78,7 @@ export default function Page({ params }: { params: { pollId: string } }): JSX.El
     }
     clearErrors("options");
     await QpAxios.post(`poll/${pollId}/vote`, {
-      option: options.at(0),
+      option: options.at(0)?.uuid,
     });
   };
 
@@ -91,14 +96,14 @@ export default function Page({ params }: { params: { pollId: string } }): JSX.El
               <p>Make a choice:</p>
               <div>
                 {data?.poll.options.map((option, index) => (
-                  <div className="mb-3 flex gap-[12px] text-secondaryGrey" key={option}>
+                  <div className="mb-3 flex gap-[12px] text-secondaryGrey" key={option.uuid}>
                     <input
                       type={data.poll.settings.is_multiple_choice ? "checkbox" : "radio"}
-                      id={option}
-                      value={option}
+                      id={option.uuid}
+                      value={option.text}
                       {...register(`options.${index}`, { onChange: handleChange })}
                     />
-                    <label htmlFor={option}>{option}</label>
+                    <label htmlFor={option.uuid}>{option.text}</label>
                   </div>
                 ))}
               </div>

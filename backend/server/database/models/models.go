@@ -24,7 +24,7 @@ type PollSettings struct {
 
 type Poll struct {
 	Id             uint   `json:"id" gorm:"primary_key"`
-	UserId         *uint   `json:"owner_id"`
+	UserId         *uint  `json:"owner_id"`
 	Uuid           string `json:"uuid"`
 	PollSettingsId uint   `json:"poll_settings_id"`
 	Question       string `json:"question"`
@@ -36,6 +36,7 @@ type Poll struct {
 
 type Option struct {
 	Id     uint   `json:"id" gorm:"primary_key"`
+	Uuid   string `json:"uuid"`
 	PollId uint   `json:"poll_id"`
 	Text   string `json:"text"`
 
