@@ -1,5 +1,11 @@
 package models
 
+type Version struct { // used for migrations
+	Id              uint
+	MigrationNumber uint
+	Desc            string
+}
+
 type User struct {
 	Id       uint   `json:"id" gorm:"primary_key"`
 	Email    string `json:"email"`
