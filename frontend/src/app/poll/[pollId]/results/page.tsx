@@ -1,10 +1,11 @@
 "use client";
 
 import bb, {
-  Chart, ChartOptions, bar, pie,
+  Chart, ChartOptions, ChartTypes, bar, pie,
 } from "billboard.js";
 import BillboardChart from "react-billboardjs";
 
+import { Poll } from "../page";
 import { AsyncWrapper } from "@/app/components/AsyncWrapper";
 import Navbar from "@/app/components/Navbar";
 import PollContainer from "@/app/components/PollContainer";
@@ -18,38 +19,73 @@ type ResultsResponse = {
   }[];
 };
 
-function createChart(results?: ResultsResponse["results"]): ChartOptions {
+function createChart(type: ChartTypes, results?: ResultsResponse["results"]): ChartOptions {
   if (!results) {
     return {
       data: {
+        type,
         columns: [],
       },
     };
   }
   return {
+    axis: {
+      rotated: true,
+      x: {
+        show: false,
+      },
+      y: {
+        show: false,
+      },
+    },
+    color: {
+      pattern: ["#FFB876", "#6DFF96", "#8459FF", "#FF7870", "#CF43EB"],
+    },
     data: {
-      type: "pie",
+      type,
+      labels: {
+        colors: "white",
+      },
       columns: results.map((result) => [result.option, result.votes]),
     },
   };
 }
 
 export default function Page({ params }: { params: { pollId: string } }): JSX.Element {
+  const { pollId } = params;
   const [resultsReq] = useQpAxios<{ results: ResultsResponse }>({
-    url: `poll/${params.pollId}/results`,
+    url: `poll/${pollId}/results`,
+    method: "GET",
+  });
+  const [pollReq] = useQpAxios<{ poll: Poll }>({
+    url: `poll/${pollId}`,
     method: "GET",
   });
 
   return (
     <main className="relative flex min-h-screen flex-col items-center justify-center">
       <Navbar />
-      <AsyncWrapper requests={[resultsReq]}>
-        <div className="min-w-[800px]">
-          <PollContainer>
-            <h1>Results</h1>
-            <BillboardChart {...createChart(resultsReq.data?.results.results)} />
-          </PollContainer>
-        </div>
+      <AsyncWrapper requests={[resultsReq, pollReq]}>
+        <PollContainer>
+          <div className="flex min-w-[800px] flex-col">
+            {/* Meta */}
+            <div>
+              <h1>{pollReq.data?.poll.title}</h1>
+              <p>By Anonymous</p>
+            </div>
+            {/* Charts */}
+            <div className="flex flex-col md:flex-row">
+              <BillboardChart {...createChart("bar", resultsReq.data?.results.results)} />
+              <BillboardChart {...createChart("pie", resultsReq.data?.results.results)} />
+            </div>
+            {/* Share */}
+            <div>
+              <h2>Share</h2>
+              {/* Temp link until we do the thingies */}
+              <p>https://quickpoll.ca/poll/{pollId}</p>
+            </div>
+          </div>
+        </PollContainer>
       </AsyncWrapper>
     </main>
   );

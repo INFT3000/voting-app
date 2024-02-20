@@ -15,7 +15,7 @@ type Option = {
   uuid: string;
 };
 
-type Poll = {
+export type Poll = {
   uuid: string;
   title: string;
   options: Option[];
