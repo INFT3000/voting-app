@@ -200,7 +200,7 @@ export default function CreatePollWidget(): JSX.Element {
             {...register("settings.disallowAnonymous")}
           />
         </div>
-        <Button theme="primary" type="submit" className="w-[100%]">Create Poll</Button>
+        <Button theme="primary" type="submit" className="mt-[10px] w-[100%]">Create Poll</Button>
       </form>
     </PollContainer>
   );
