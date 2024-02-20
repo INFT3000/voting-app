@@ -129,7 +129,7 @@ export default function CreatePollWidget(): JSX.Element {
                 className="mb-[5px] flex flex-col"
               >
                 <div
-                  className={`mb-[5px] flex h-[40px] items-center rounded-lg bg-tetraDark p-[10px] ${focusedIndex[index] ? "border-[1px] border-primaryBlue" : ''}`}
+                  className={`mb-[5px] flex h-[40px] items-center rounded-lg bg-tetraDark p-[10px] ${focusedIndex[index] ? "border-[1px] border-primaryBlue" : ""}`}
                 >
                   <input
                     type="text"
