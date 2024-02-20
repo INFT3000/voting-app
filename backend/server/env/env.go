@@ -20,7 +20,7 @@ type Environment struct {
 	DB_PASSWORD   string `validate:"required"`
 
 	SENTRY_DSN string `validate:"required,url"`
-	ENV        string `validate:"required,oneof=dev"` // when prod is up, `validate:"required,oneof=dev prod"`
+	ENV        string `validate:"required,oneof=dev prod"` // when prod is up, `validate:"required,oneof=dev prod"`
 }
 
 var Env *Environment = &Environment{}
