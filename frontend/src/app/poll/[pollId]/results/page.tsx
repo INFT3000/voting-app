@@ -58,6 +58,12 @@ function createChart(type: ChartTypes, results?: ResultsResponse["results"]): Ch
       },
       columns: results.map((result) => [result.option, result.votes]),
     },
+    bar: {
+      width: {
+        max: 25,
+      },
+      padding: 50,
+    },
   };
 }
 
@@ -77,7 +83,7 @@ export default function Page({ params }: { params: { pollId: string } }): JSX.El
       <Navbar />
       <AsyncWrapper requests={[resultsReq, pollReq]}>
         <PollContainer>
-          <div className="flex min-w-[800px] flex-col">
+          <div className="flex min-w-[400px] flex-col">
             {/* Meta */}
             <div>
               <h1>{pollReq.data?.poll.title}</h1>
@@ -85,7 +91,7 @@ export default function Page({ params }: { params: { pollId: string } }): JSX.El
             </div>
             {/* Charts */}
             <div>
-              <div className="flex flex-col md:flex-row">
+              <div className="flex flex-col lg:flex-row">
                 <BillboardChart {...createChart("bar", resultsReq.data?.results.results)} />
                 <BillboardChart {...createChart("pie", resultsReq.data?.results.results)} />
               </div>
