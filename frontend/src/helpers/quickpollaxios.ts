@@ -2,7 +2,7 @@ import axios from "axios";
 import useAxios, { configure } from "axios-hooks";
 
 export const QpAxios = axios.create({
-  baseURL: "http://localhost:8080/api/",
+  baseURL: "https://quickpoll.ca/api/", // TO-DO: Change to env variable
   //   timeout: 1000,
   headers: {
     Accept: "application/json",
