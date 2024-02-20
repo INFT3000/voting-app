@@ -105,7 +105,7 @@ export default function Page({ params }: { params: { pollId: string } }): JSX.El
               <p>Make a choice:</p>
               <div>
                 {data?.poll.options.map((option, index) => (
-                  <div className="mb-3 flex gap-[12px] text-secondaryGrey" key={option.uuid}>
+                  <div className="text-secondaryGrey mb-3 flex gap-[12px]" key={option.uuid}>
                     <input
                       type={data.poll.settings.is_multiple_choice ? "checkbox" : "radio"}
                       id={option.uuid}
