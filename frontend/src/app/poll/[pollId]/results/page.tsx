@@ -38,6 +38,13 @@ function createChart(type: ChartTypes, results?: ResultsResponse["results"]): Ch
         show: false,
       },
     },
+    tooltip: {
+      grouped: false,
+      contents: (d) => {
+        const data = d[0];
+        return `<div class="tooltip">${data.name}: ${data.value}</div>`;
+      },
+    },
     legend: {
       show: false,
     },
