@@ -84,43 +84,43 @@ export default function Page({ params }: { params: { pollId: string } }): JSX.El
   };
 
   return (
-    <main className="flex min-h-screen flex-col justify-center">
+    <main className="relative flex min-h-screen flex-col items-center justify-center">
       <Navbar />
-      <PollContainer>
         <AsyncWrapper requests={[pollReq]}>
-          <form className="flex w-[100%] flex-col justify-start gap-[45px]" onSubmit={handleSubmit(onSubmit)}>
-            <div>
-              <h1 className="text-3xl font-bold">{data?.poll.title}</h1>
-              <p className="text-secondaryGrey">By Anonymous</p>
-            </div>
-            <div className="flex flex-col gap-[20px]">
-              <p>Make a choice:</p>
+          <PollContainer>
+            <form className="flex w-[100%] flex-col justify-start gap-[45px]" onSubmit={handleSubmit(onSubmit)}>
               <div>
-                {data?.poll.options.map((option, index) => (
-                  <div className="mb-3 flex gap-[12px] text-secondaryGrey" key={option.uuid}>
-                    <input
-                      type={data.poll.settings.is_multiple_choice ? "checkbox" : "radio"}
-                      id={option.uuid}
-                      value={option.uuid}
-                      {...register(`options.${index}`, { onChange: handleChange })}
-                    />
-                    <label htmlFor={option.uuid}>{option.text}</label>
-                  </div>
-                ))}
+                <h1 className="text-3xl font-bold">{data?.poll.title}</h1>
+                <p className="text-secondaryGrey">By Anonymous</p>
               </div>
-            </div>
-            <ErrorMessage errors={errors} name="options" render={({ message }) => <ErrorText message={message} />} />
-            <div className="flex gap-[18px]">
-              <Button theme="primary" type="submit">Vote</Button>
-              <Button theme="secondary">
-                <Link href={`/poll/${pollId}/results`}>
-                  View Results
-                </Link>
-              </Button>
-            </div>
-          </form>
+              <div className="flex flex-col gap-[20px]">
+                <p>Make a choice:</p>
+                <div>
+                  {data?.poll.options.map((option, index) => (
+                    <div className="mb-3 flex gap-[12px] text-secondaryGrey" key={option.uuid}>
+                      <input
+                        type={data.poll.settings.is_multiple_choice ? "checkbox" : "radio"}
+                        id={option.uuid}
+                        value={option.uuid}
+                        {...register(`options.${index}`, { onChange: handleChange })}
+                      />
+                      <label htmlFor={option.uuid}>{option.text}</label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <ErrorMessage errors={errors} name="options" render={({ message }) => <ErrorText message={message} />} />
+              <div className="flex gap-[18px]">
+                <Button theme="primary" type="submit">Vote</Button>
+                <Button theme="secondary">
+                  <Link href={`/poll/${pollId}/results`}>
+                    View Results
+                  </Link>
+                </Button>
+              </div>
+            </form>
+          </PollContainer>
         </AsyncWrapper>
-      </PollContainer>
     </main>
   );
 }
