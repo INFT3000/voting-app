@@ -1,8 +1,6 @@
 "use client";
 
-import {
-  ChartOptions, ChartTypes,
-} from "billboard.js";
+import { ChartOptions, ChartTypes } from "billboard.js";
 import BillboardChart from "react-billboardjs";
 
 import { Poll } from "../page";
