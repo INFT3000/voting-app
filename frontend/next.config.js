@@ -33,7 +33,7 @@ module.exports = withSentryConfig(
     silent: true,
     org: "sdunne",
     project: "quickpoll-frontend",
-    url: "https://sentry.sdunne.dev/",
+    url: "https://sentry.sdunne.dev",
   },
   {
     // For all available options, see:

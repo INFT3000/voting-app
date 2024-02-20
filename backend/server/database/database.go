@@ -6,11 +6,16 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 
-	"github.com/INFT3000/voting-app/server/database/models"
+	"github.com/INFT3000/voting-app/server/database/migrations"
 	"github.com/INFT3000/voting-app/server/env"
 )
 
 var Context *gorm.DB
+
+func RunMigrations(db *gorm.DB) error {
+	migrator := migrations.New(db)
+	return migrator.RunMigrations()
+}
 
 func ConnectDatabase() {
 	var dsn string = fmt.Sprintf(
@@ -36,17 +41,10 @@ func ConnectDatabase() {
 		panic("Failed to connect to database!")
 	}
 
-	err = database.AutoMigrate(
-		&models.User{},
-		&models.VoterSession{},
-		&models.PollSettings{},
-		&models.Poll{},
-		&models.Option{},
-		&models.Vote{},
-	)
+	err = RunMigrations(database)
 
 	if err != nil {
-		panic("Failed to migrate database!")
+		panic("Failed to migrate database!\n" + err.Error())
 	}
 
 	Context = database

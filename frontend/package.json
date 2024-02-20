@@ -15,9 +15,11 @@
     "@hookform/error-message": "^2.0.1",
     "@sentry/nextjs": "^7.95.0",
     "axios": "^1.6.7",
+    "axios-hooks": "^5.0.2",
     "billboard.js": "^3.10.3",
     "next": "14.0.4",
     "react": "^18",
+    "react-billboardjs": "^3.0.4",
     "react-dom": "^18",
     "react-hook-form": "^7.49.3",
     "react-if": "^4.1.5"

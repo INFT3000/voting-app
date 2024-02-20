@@ -3,6 +3,7 @@
 import { ErrorMessage } from "@hookform/error-message";
 import axios from "axios";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { When } from "react-if";
@@ -52,6 +53,7 @@ function ErrorText({ message }: { message: string }): JSX.Element {
 }
 
 export default function CreatePollWidget(): JSX.Element {
+  const router = useRouter();
   const formMethods = useForm<ICreatePoll>();
   const {
     register, setError, formState, handleSubmit,
@@ -86,8 +88,11 @@ export default function CreatePollWidget(): JSX.Element {
   };
 
   const onSubmit = async (payload: ICreatePoll): Promise<void> => {
-    const response = await QpAxios.post("poll/", payload);
-    console.log(response);
+    const response = await QpAxios.post<{ response: { uuid: string } }>("poll/", payload);
+    if (response.status === 201) {
+      const { uuid } = response.data.response;
+      await router.push(`/poll/${uuid}`);
+    }
   };
 
   return (
@@ -170,7 +175,7 @@ export default function CreatePollWidget(): JSX.Element {
               type="button"
               icon={<AddIcon />}
               onClick={handleAddOption}
-              className="max-w-[30vw] justify-center px-[3px] text-[14px] text-grey md:w-[15vw] md:text-[12px] lg:w-[10vw] lg:text-[13px]"
+              className=" justify-center px-[3px] text-[14px] text-grey "
             >
               Add Option
             </IconButton>
@@ -195,7 +200,7 @@ export default function CreatePollWidget(): JSX.Element {
             {...register("settings.disallowAnonymous")}
           />
         </div>
-        <Button theme="primary" type="submit" className="my-[1vh] w-[100%]">Create Poll</Button>
+        <Button theme="primary" type="submit" className="w-[100%]">Create Poll</Button>
       </form>
     </PollContainer>
   );

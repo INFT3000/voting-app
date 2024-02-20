@@ -72,7 +72,7 @@ func createQuickPollApp() *gin.Engine {
 				ExposeHeaders:    []string{"Content-Length"},
 				AllowCredentials: true,
 				AllowOriginFunc: func(origin string) bool {
-					return strings.Contains(origin, "localhost")
+					return strings.Contains(origin, "localhost") || strings.Contains(origin, "quickpoll.ca")
 				},
 				MaxAge: 12 * time.Hour,
 			}),
