@@ -79,9 +79,9 @@ export default function CreatePollWidget(): JSX.Element {
   };
 
   const onSubmit = async (payload: ICreatePoll): Promise<void> => {
-    const response = await QpAxios.post<{ res: { uuid: string } }>("poll/", payload);
+    const response = await QpAxios.post<{ response: { uuid: string } }>("poll/", payload);
     if (response.status === 201) {
-      const { uuid } = response.data.res;
+      const { uuid } = response.data.response;
       await router.push(`/poll/${uuid}`);
     }
   };
