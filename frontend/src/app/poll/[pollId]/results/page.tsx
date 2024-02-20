@@ -1,7 +1,7 @@
 "use client";
 
-import bb, {
-  Chart, ChartOptions, ChartTypes, bar, pie,
+import {
+  ChartOptions, ChartTypes,
 } from "billboard.js";
 import BillboardChart from "react-billboardjs";
 
@@ -92,7 +92,7 @@ export default function Page({ params }: { params: { pollId: string } }): JSX.El
             {/* Charts */}
             <div>
               <div className="flex flex-col lg:flex-row">
-                <BillboardChart {...createChart("bar", resultsReq.data?.results.results)} />
+                <BillboardChart className="rounded-bars" {...createChart("bar", resultsReq.data?.results.results)} />
                 <BillboardChart {...createChart("pie", resultsReq.data?.results.results)} />
               </div>
               <p>Total votes: {resultsReq.data?.results.results.reduce((acc, result) => acc + result.votes, 0)}</p>

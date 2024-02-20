@@ -2,6 +2,7 @@
 
 import { ErrorMessage } from "@hookform/error-message";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 import { AsyncWrapper } from "@/app/components/AsyncWrapper";
@@ -53,9 +54,11 @@ export default function Page({ params }: { params: { pollId: string } }): JSX.El
     clearErrors("options");
     // TO-DO: RADIO BUTTON ISSUE
   };
-
+  const router = useRouter();
   const onSubmit = async (payload: Selection): Promise<void> => {
-    const options = payload.options.filter((option) => option !== null && option !== undefined);
+    let options = Array.isArray(payload.options) ? payload.options : [payload.options];
+    options = options.filter((option) => option !== null && option !== undefined);
+
     if (options.length === 0) {
       setError("options", {
         type: "manual",
@@ -78,16 +81,21 @@ export default function Page({ params }: { params: { pollId: string } }): JSX.El
       return;
     }
     clearErrors("options");
-    await QpAxios.post(`poll/${pollId}/vote`, {
-      option: options.at(0),
-    });
+    try {
+      await QpAxios.post(`poll/${pollId}/vote`, {
+        option: options.at(0),
+      });
+      await router.push(`/poll/${pollId}/results`);
+    } catch (error) {
+      console.error("Failed to cast vote:", error);
+    }
   };
 
   return (
-    <main className="flex min-h-screen flex-col justify-center">
+    <main className="relative flex min-h-screen flex-col items-center justify-center">
       <Navbar />
-      <PollContainer>
-        <AsyncWrapper requests={[pollReq]}>
+      <AsyncWrapper requests={[pollReq]}>
+        <PollContainer>
           <form className="flex w-[100%] flex-col justify-start gap-[45px]" onSubmit={handleSubmit(onSubmit)}>
             <div>
               <h1 className="text-3xl font-bold">{data?.poll.title}</h1>
@@ -102,7 +110,7 @@ export default function Page({ params }: { params: { pollId: string } }): JSX.El
                       type={data.poll.settings.is_multiple_choice ? "checkbox" : "radio"}
                       id={option.uuid}
                       value={option.uuid}
-                      {...register(`options.${index}`, { onChange: handleChange })}
+                      {...register(data.poll.settings.is_multiple_choice ? `options.${index}` : "options", { onChange: handleChange })}
                     />
                     <label htmlFor={option.uuid}>{option.text}</label>
                   </div>
@@ -119,8 +127,8 @@ export default function Page({ params }: { params: { pollId: string } }): JSX.El
               </Button>
             </div>
           </form>
-        </AsyncWrapper>
-      </PollContainer>
+        </PollContainer>
+      </AsyncWrapper>
     </main>
   );
 }
