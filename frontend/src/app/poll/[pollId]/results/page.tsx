@@ -38,6 +38,9 @@ function createChart(type: ChartTypes, results?: ResultsResponse["results"]): Ch
         show: false,
       },
     },
+    legend: {
+      show: false,
+    },
     color: {
       pattern: ["#FFB876", "#6DFF96", "#8459FF", "#FF7870", "#CF43EB"],
     },
@@ -74,9 +77,12 @@ export default function Page({ params }: { params: { pollId: string } }): JSX.El
               <p>By Anonymous</p>
             </div>
             {/* Charts */}
-            <div className="flex flex-col md:flex-row">
-              <BillboardChart {...createChart("bar", resultsReq.data?.results.results)} />
-              <BillboardChart {...createChart("pie", resultsReq.data?.results.results)} />
+            <div>
+              <div className="flex flex-col md:flex-row">
+                <BillboardChart {...createChart("bar", resultsReq.data?.results.results)} />
+                <BillboardChart {...createChart("pie", resultsReq.data?.results.results)} />
+              </div>
+              <p>Total votes: {resultsReq.data?.results.results.reduce((acc, result) => acc + result.votes, 0)}</p>
             </div>
             {/* Share */}
             <div>
