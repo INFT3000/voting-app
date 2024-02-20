@@ -108,4 +108,5 @@ export default function Page({ params }: { params: { pollId: string } }): JSX.El
       </AsyncWrapper>
     </main>
   );
+  
 }
