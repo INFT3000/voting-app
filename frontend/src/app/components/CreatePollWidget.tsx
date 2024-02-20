@@ -110,7 +110,7 @@ export default function CreatePollWidget(): JSX.Element {
             })}
             id="title"
             placeholder="Type your question here."
-            className="mb-[5px] rounded-lg bg-tetraDark p-[10px] text-white outline-none border-[1px] border-transparent focus:border-primaryBlue"
+            className="mb-[5px] rounded-lg border-[1px] border-transparent bg-tetraDark p-[10px] text-white outline-none focus:border-primaryBlue"
           />
           <ErrorMessage
             errors={errors}
@@ -126,10 +126,10 @@ export default function CreatePollWidget(): JSX.Element {
               <div
                 // eslint-disable-next-line react/no-array-index-key
                 key={index}
-                className={`mb-[5px] flex flex-col`}
+                className="mb-[5px] flex flex-col"
               >
                 <div
-                  className={`mb-[5px] flex h-[40px] items-center rounded-lg bg-tetraDark p-[10px] ${focusedIndex[index] ? 'border-[1px] border-primaryBlue' : ''}`}
+                  className={`mb-[5px] flex h-[40px] items-center rounded-lg bg-tetraDark p-[10px] ${focusedIndex[index] ? "border-[1px] border-primaryBlue" : ''}`}
                 >
                   <input
                     type="text"
@@ -145,7 +145,7 @@ export default function CreatePollWidget(): JSX.Element {
                     placeholder={`Option ${index + 1}`}
                     value={option}
                     onChange={(e) => handleOptionChange(e.target.value, index)}
-                    className="w-full grow bg-tetraDark text-white outline-none border-none"
+                    className="w-full grow border-none bg-tetraDark text-white outline-none"
                   />
                   {/* Only show the remove button if there are more than 2 options */}
                   <When condition={index > 1}>
