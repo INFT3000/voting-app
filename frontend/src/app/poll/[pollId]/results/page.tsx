@@ -79,8 +79,8 @@ export default function Page({ params }: { params: { pollId: string } }): JSX.El
   return (
     <main className="relative flex min-h-screen flex-col items-center justify-center">
       <Navbar />
-      <PollContainer>
-        <AsyncWrapper requests={[resultsReq, pollReq]}>
+      <AsyncWrapper requests={[resultsReq, pollReq]}>
+        <PollContainer>
           <div className="flex min-w-[400px] flex-col">
             {/* Meta */}
             <div>
@@ -102,8 +102,8 @@ export default function Page({ params }: { params: { pollId: string } }): JSX.El
               <p>https://quickpoll.ca/poll/{pollId}</p>
             </div>
           </div>
-        </AsyncWrapper>
-      </PollContainer>
+        </PollContainer>
+      </AsyncWrapper>
     </main>
   );
 }
