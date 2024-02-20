@@ -65,6 +65,15 @@ export default function CreatePollWidget(): JSX.Element {
   const handleAddOption = (): void => {
     setOptions([...options, ""]);
   };
+  const [focusedIndex, setFocusedIndex] = useState<Record<number, boolean>>({});
+
+  const handleFocus = (index: number): void => {
+    setFocusedIndex({ ...focusedIndex, [index]: true });
+  };
+
+  const handleBlur = (index: number): void => {
+    setFocusedIndex({ ...focusedIndex, [index]: false });
+  };
 
   const handleOptionChange = (value: string, index: number): void => {
     const newOptions = [...options];
@@ -106,7 +115,7 @@ export default function CreatePollWidget(): JSX.Element {
             })}
             id="title"
             placeholder="Type your question here."
-            className="mb-[5px] rounded-lg bg-tetraDark p-[10px] text-white outline-none focus:border-[1px] focus:border-primaryBlue"
+            className="mb-[5px] rounded-lg border-[1px] border-transparent bg-tetraDark p-[10px] text-white outline-none focus:border-primaryBlue"
           />
           <ErrorMessage
             errors={errors}
@@ -125,7 +134,7 @@ export default function CreatePollWidget(): JSX.Element {
                 className="mb-[5px] flex flex-col"
               >
                 <div
-                  className="mb-[5px] flex h-[40px] items-center rounded-lg bg-tetraDark p-[10px]"
+                  className={`mb-[5px] flex h-[40px] items-center rounded-lg bg-tetraDark p-[10px] ${focusedIndex[index] ? "border-[1px] border-primaryBlue" : ""}`}
                 >
                   <input
                     type="text"
@@ -136,10 +145,12 @@ export default function CreatePollWidget(): JSX.Element {
                         message: "Must be less than 255 characters long.",
                       },
                     })}
+                    onFocus={() => handleFocus(index)}
+                    onBlur={() => handleBlur(index)}
                     placeholder={`Option ${index + 1}`}
                     value={option}
                     onChange={(e) => handleOptionChange(e.target.value, index)}
-                    className=" w-full grow bg-tetraDark text-white"
+                    className="w-full grow border-none bg-tetraDark text-white outline-none"
                   />
                   {/* Only show the remove button if there are more than 2 options */}
                   <When condition={index > 1}>
