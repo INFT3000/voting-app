@@ -22,7 +22,8 @@
     "react-billboardjs": "^3.0.4",
     "react-dom": "^18",
     "react-hook-form": "^7.49.3",
-    "react-if": "^4.1.5"
+    "react-if": "^4.1.5",
+    "react-tabs": "^6.0.2"
   },
   "devDependencies": {
     "@polyfillhq/eslint-config": "^2.0.6",

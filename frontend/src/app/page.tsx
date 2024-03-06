@@ -20,10 +20,10 @@ export default function Home(): JSX.Element {
         </div>
         <div className="buttonCont flex flex-row items-center justify-center gap-5 lg:items-start">
           <Button theme="primary">
-            <Link href="/signup">Login</Link>
+            <Link href="/auth">Login</Link>
           </Button>
           <Button theme="secondary">
-            <Link href="/signup">Signup</Link>
+            <Link href="/auth">Signup</Link>
           </Button>
         </div>
       </div>
@@ -31,6 +31,5 @@ export default function Home(): JSX.Element {
         <CreatePollWidget />
       </div>
     </main>
-
   );
 }
