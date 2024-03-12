@@ -80,7 +80,7 @@ export default function Page({ params }: { params: { pollId: string } }): JSX.El
     <main className="relative flex min-h-screen flex-col items-center justify-center">
       <Navbar />
       <AsyncWrapper requests={[resultsReq, pollReq]}>
-        <FormContainer>
+        <FormContainer className="">
           <div className="flex min-w-[400px] flex-col">
             {/* Meta */}
             <div>
