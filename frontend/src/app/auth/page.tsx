@@ -3,6 +3,7 @@
 import {
   Tab, TabList, TabPanel, Tabs,
 } from "react-tabs";
+import Image from "next/image";
 
 import FormContainer from "../components/FormContainer";
 import Login from "../components/Login";
@@ -15,19 +16,23 @@ export default function Auth(): JSX.Element {
       <Navbar />
       <div className="flex h-screen items-center justify-center">
         <div>
-          <FormContainer>
+          <FormContainer className="p-0">
             <Tabs>
-              <TabList className="flex gap-2">
-                <Tab selectedClassName="">Login</Tab>
-                <Tab selectedClassName="">Register</Tab>
+              <TabList className="flex w-full items-center justify-between">
+                <Tab selectedClassName="bg-tetraDark tranistion-all" className="w-full cursor-pointer p-3 text-center font-bold transition-all">Login</Tab>
+                <Tab selectedClassName="bg-tetraDark tranistion-all" className="w-full cursor-pointer p-3 text-center font-bold transition-all">Register</Tab>
               </TabList>
-
-              <TabPanel>
-                <Login className="" />
-              </TabPanel>
-              <TabPanel>
-                <Signup className="" />
-              </TabPanel>
+              <div className="logo flex w-full items-center justify-center p-2">
+                <Image src="/assets/logo-white.svg" alt="logo" width={190} height={190} />
+              </div>
+              <div className="px-[25px] pb-[25px]">
+                <TabPanel className="">
+                  <Login className="" />
+                </TabPanel>
+                <TabPanel className="">
+                  <Signup className="" />
+                </TabPanel>
+              </div>
             </Tabs>
           </FormContainer>
         </div>
