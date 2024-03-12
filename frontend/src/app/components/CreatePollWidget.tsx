@@ -114,7 +114,7 @@ export default function CreatePollWidget(): JSX.Element {
   };
 
   return (
-    <FormContainer>
+    <FormContainer className="">
       <form className="w-[100%]" onSubmit={handleSubmit(onSubmit)}>
         <div className="inputGroup flex flex-col">
           <label htmlFor="title" className="mb-[5px] font-medium text-white">Title</label>
