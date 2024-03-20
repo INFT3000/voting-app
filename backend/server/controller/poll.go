@@ -7,6 +7,7 @@ import (
 
 	"github.com/INFT3000/voting-app/server/database"
 	"github.com/INFT3000/voting-app/server/database/models"
+	"github.com/INFT3000/voting-app/server/token"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
@@ -138,6 +139,20 @@ func postVote(c *gin.Context) {
 
 	session := models.VoterSession{
 		Ip: c.ClientIP(),
+	}
+
+	if token.ExtractToken(c) != "" {
+		err := token.EnsureTokenIsValid(c)
+		if err != nil {
+			c.AbortWithError(http.StatusUnauthorized, err)
+			return
+		}
+		token, err := token.ExtractTokenID(c)
+		if err != nil {
+			c.AbortWithError(http.StatusInternalServerError, err)
+			return
+		}
+		session.UserId = token
 	}
 
 	selectedOptionId := 0
