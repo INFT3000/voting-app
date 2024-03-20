@@ -1,9 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import {
   Tab, TabList, TabPanel, Tabs,
 } from "react-tabs";
-import Image from "next/image";
 
 import FormContainer from "../components/FormContainer";
 import Login from "../components/Login";

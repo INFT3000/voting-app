@@ -1,10 +1,11 @@
 import { ErrorMessage } from "@hookform/error-message";
 import { useRouter } from "next/router";
 import React from "react";
-import { useForm } from "react-hook-form";
+import { UseFormSetError, useForm } from "react-hook-form";
 
 import Button from "./Button";
 import FormContainer from "./FormContainer";
+import { QpAxios } from "@/helpers/quickpollaxios";
 
 function ErrorText({ message }: { message: string }): JSX.Element {
   return (
@@ -21,16 +22,29 @@ interface ISignup {
 export default function Signup({ className }): JSX.Element {
   const formMethods = useForm<ISignup>();
   const {
-    register, formState, handleSubmit,
+    register, formState, handleSubmit, setError,
   } = formMethods;
 
   const { errors } = formState;
 
   const onSubmit = async (data: ISignup): Promise<void> => {
-    try {
-      console.log(data);
-    } catch (error) {
-      console.log("error!", error);
+    if (data.password !== data.confirmPassword) {
+      setError("confirmPassword", {
+        type: "manual",
+        message: "Passwords do not match",
+      });
+      return;
+    }
+
+    const payload = {
+      username: data.username,
+      password: data.password,
+    };
+    const response = await QpAxios.post<{ token: string }>("auth/signup", payload);
+    if (response.status === 201) {
+      const { token } = response.data;
+      localStorage.setItem("token", token);
+      // await router.push(`/profile, or something.`);
     }
   };
 
