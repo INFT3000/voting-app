@@ -153,6 +153,42 @@ func postVote(c *gin.Context) {
 			return
 		}
 		session.UserId = token
+
+		var count int64
+		database.Context.Model(&models.VoterSession{}).Where("user_id = ?", session.UserId).Count(&count)
+		if count > 0 {
+			err := &gin.Error{
+				Err:  errors.New("user already voted"),
+				Type: gin.ErrorTypePublic,
+			}
+			c.Errors = append(c.Errors, err)
+			c.AbortWithStatus(http.StatusForbidden)
+			return
+		}
+	}
+
+	if poll.PollSettings.DisallowSameIp {
+		var count int64
+		database.Context.Model(&models.VoterSession{}).Where("ip = ?", session.Ip).Count(&count)
+		if count > 0 {
+			err := &gin.Error{
+				Err:  errors.New("ip already voted"),
+				Type: gin.ErrorTypePublic,
+			}
+			c.Errors = append(c.Errors, err)
+			c.AbortWithStatus(http.StatusForbidden)
+			return
+		}
+	}
+
+	if poll.PollSettings.DisallowAnonymous && session.UserId == 0 {
+		err := &gin.Error{
+			Err:  errors.New("anonymous voting disallowed"),
+			Type: gin.ErrorTypePublic,
+		}
+		c.Errors = append(c.Errors, err)
+		c.AbortWithStatus(http.StatusForbidden)
+		return
 	}
 
 	selectedOptionId := 0
