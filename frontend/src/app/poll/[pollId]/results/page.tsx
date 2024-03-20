@@ -5,7 +5,6 @@ import { ChartOptions, ChartTypes } from "billboard.js";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import BillboardChart from "react-billboardjs";
-import { Tooltip } from "react-tooltip";
 
 import { Poll } from "../page";
 import { AsyncWrapper } from "@/app/components/AsyncWrapper";
