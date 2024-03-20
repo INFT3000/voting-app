@@ -1,11 +1,12 @@
 import { ErrorMessage } from "@hookform/error-message";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { Form, useForm } from "react-hook-form";
 
 import Button from "./Button";
 import FormContainer from "./FormContainer";
-import Link from "next/link";
+import { QpAxios, setToken } from "@/helpers/quickpollaxios";
 
 function ErrorText({ message }: { message: string }): JSX.Element {
   return (
@@ -21,17 +22,27 @@ interface ILogin {
 export default function Login({ className }): JSX.Element {
   const formMethods = useForm<ILogin>();
   const {
-    register, formState, handleSubmit,
+    register, formState, handleSubmit, setError,
   } = formMethods;
 
   const { errors } = formState;
 
   const onSubmit = async (data: ILogin): Promise<void> => {
-    try {
-      console.log(data);
-    } catch (error) {
-      console.log("error!", error);
+    const payload = {
+      username: data.username,
+      password: data.password,
+    };
+    const response = await QpAxios.post<{ token: string }>("auth/login", payload);
+    if (response.status === 201) {
+      const { token } = response.data;
+      setToken(token);
+      return;
+      // await router.push(`/profile, or something.`);
     }
+    setError("username", {
+      type: "manual",
+      message: "Username or password is incorrect",
+    });
   };
 
   return (

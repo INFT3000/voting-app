@@ -5,7 +5,7 @@ import { UseFormSetError, useForm } from "react-hook-form";
 
 import Button from "./Button";
 import FormContainer from "./FormContainer";
-import { QpAxios } from "@/helpers/quickpollaxios";
+import { QpAxios, setToken } from "@/helpers/quickpollaxios";
 
 function ErrorText({ message }: { message: string }): JSX.Element {
   return (
@@ -40,12 +40,17 @@ export default function Signup({ className }): JSX.Element {
       username: data.username,
       password: data.password,
     };
-    const response = await QpAxios.post<{ token: string }>("auth/signup", payload);
+    const response = await QpAxios.post<{ token: string }>("auth/signp", payload);
     if (response.status === 201) {
       const { token } = response.data;
-      localStorage.setItem("token", token);
+      setToken(token);
+      return;
       // await router.push(`/profile, or something.`);
     }
+    setError("confirmPassword", {
+      type: "manual",
+      message: "Username already exists",
+    });
   };
 
   return (

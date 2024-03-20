@@ -14,9 +14,12 @@ configure({
   axios: QpAxios,
 });
 
-function setToken(token: string): void {
+export function setToken(token: string): void {
   localStorage.setItem("token", token);
   QpAxios.defaults.headers.common.Authorization = `Bearer ${token}`;
+  configure({
+    axios: QpAxios,
+  });
 }
 
 const useQpAxios = useAxios;
