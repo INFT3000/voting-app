@@ -9,8 +9,8 @@ import { useForm } from "react-hook-form";
 import { When } from "react-if";
 
 import Button from "./Button";
+import FormContainer from "./FormContainer";
 import IconButton from "./IconButton";
-import PollContainer from "./PollContainer";
 import ToggleSwitch from "./ToggleSwitch";
 import { QpAxios } from "@/helpers/quickpollaxios";
 
@@ -96,7 +96,7 @@ export default function CreatePollWidget(): JSX.Element {
   };
 
   return (
-    <PollContainer>
+    <FormContainer className="">
       <form className="w-[100%]" onSubmit={handleSubmit(onSubmit)}>
         <div className="inputGroup flex flex-col">
           <label htmlFor="title" className="mb-[5px] font-medium text-white">Title</label>
@@ -145,8 +145,8 @@ export default function CreatePollWidget(): JSX.Element {
                         message: "Must be less than 255 characters long.",
                       },
                     })}
-                    onFocus={() => handleFocus(index)}
-                    onBlur={() => handleBlur(index)}
+                    // onFocus={() => handleFocus(index)}
+                    // onBlur={() => handleBlur(index)}
                     placeholder={`Option ${index + 1}`}
                     value={option}
                     onChange={(e) => handleOptionChange(e.target.value, index)}
@@ -202,6 +202,6 @@ export default function CreatePollWidget(): JSX.Element {
         </div>
         <Button theme="primary" type="submit" className="mt-[10px] w-[100%]">Create Poll</Button>
       </form>
-    </PollContainer>
+    </FormContainer>
   );
 }

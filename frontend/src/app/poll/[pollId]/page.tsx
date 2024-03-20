@@ -7,9 +7,9 @@ import { useForm } from "react-hook-form";
 
 import { AsyncWrapper } from "@/app/components/AsyncWrapper";
 import Button from "@/app/components/Button";
+import FormContainer from "@/app/components/FormContainer";
 import Navbar from "@/app/components/Navbar";
-import PollContainer from "@/app/components/PollContainer";
-import useQpAxios, { QpAxios } from "@/helpers/quickpollaxios";
+import useQpAxios, { QpAxios, setToken } from "@/helpers/quickpollaxios";
 
 type Option = {
   text: string;
@@ -82,6 +82,7 @@ export default function Page({ params }: { params: { pollId: string } }): JSX.El
     }
     clearErrors("options");
     try {
+      setToken(localStorage.getItem("token")!);
       await QpAxios.post(`poll/${pollId}/vote`, {
         option: options.at(0),
       });
@@ -95,7 +96,7 @@ export default function Page({ params }: { params: { pollId: string } }): JSX.El
     <main className="relative flex min-h-screen flex-col items-center justify-center">
       <Navbar />
       <AsyncWrapper requests={[pollReq]}>
-        <PollContainer>
+        <FormContainer className="">
           <form className="flex w-[100%] flex-col justify-start gap-[45px]" onSubmit={handleSubmit(onSubmit)}>
             <div>
               <h1 className="text-3xl font-bold">{data?.poll.title}</h1>
@@ -127,7 +128,7 @@ export default function Page({ params }: { params: { pollId: string } }): JSX.El
               </Button>
             </div>
           </form>
-        </PollContainer>
+        </FormContainer>
       </AsyncWrapper>
     </main>
   );
