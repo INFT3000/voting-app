@@ -1,10 +1,11 @@
 "use client";
 
-import { ContentCopy } from "@mui/icons-material";
+import { CheckCircleOutline, ContentCopy } from "@mui/icons-material";
 import { ChartOptions, ChartTypes } from "billboard.js";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import BillboardChart from "react-billboardjs";
+import { Tooltip } from "react-tooltip";
 
 import { Poll } from "../page";
 import { AsyncWrapper } from "@/app/components/AsyncWrapper";
@@ -69,17 +70,6 @@ function createChart(type: ChartTypes, results?: ResultsResponse["results"]): Ch
   };
 }
 
-function RemoveIcon(): JSX.Element {
-  return (
-    <Image
-      src="ContentCopyIcon"
-      alt="copy"
-      width={18}
-      height={18}
-    />
-  );
-}
-
 export default function Page({ params }: { params: { pollId: string } }): JSX.Element {
   const { pollId } = params;
   const [resultsReq] = useQpAxios<{ results: ResultsResponse }>({
@@ -91,12 +81,14 @@ export default function Page({ params }: { params: { pollId: string } }): JSX.El
     method: "GET",
   });
 
-  const [copySuccess, setCopySuccess] = useState("");
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const [copySuccess, setCopySuccess] = useState(false);
+  const textRef = useRef<HTMLParagraphElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  buttonRef.current?.focus();
 
   const copyToClipboard = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
-    await navigator.clipboard.writeText(textAreaRef.current!.value);
-    setCopySuccess("Copied!");
+    await navigator.clipboard.writeText(textRef.current!.innerHTML);
+    setCopySuccess(true);
   };
 
   return (
@@ -122,20 +114,18 @@ export default function Page({ params }: { params: { pollId: string } }): JSX.El
             <div>
               <h2>Share</h2>
               {/* Temp link until we do the thingies */}
-              <p>https://quickpoll.ca/poll/{pollId}</p>
-              <div>
-                <textarea
-                  ref={textAreaRef}
-                  value={`https://quickpoll.ca/poll/${pollId}`}
-                  readOnly
-                />
+              <div className="flex gap-[8px] rounded-lg bg-tetraDark p-[10px]">
+                <div className="">
+                  <p ref={textRef}>
+                    https://quickpoll.ca/poll/{pollId}
+                  </p>
+                </div>
                 <IconButton
                   theme="ghost"
                   type="button"
-                  icon={<ContentCopy />}
+                  icon={copySuccess ? <CheckCircleOutline /> : <ContentCopy />}
                   onClick={copyToClipboard}
                 />
-                {copySuccess}
               </div>
             </div>
           </div>

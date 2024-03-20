@@ -145,11 +145,11 @@ export default function CreatePollWidget(): JSX.Element {
                         message: "Must be less than 255 characters long.",
                       },
                     })}
-                    onFocus={() => handleFocus(index)}
+                    // onFocus={() => handleFocus(index)}
                     onBlur={() => handleBlur(index)}
                     placeholder={`Option ${index + 1}`}
-                    value={option}
-                    onChange={(e) => handleOptionChange(e.target.value, index)}
+                    // value={option}
+                    // onChange={(e) => handleOptionChange(e.target.value, index)}
                     className="w-full grow border-none bg-tetraDark text-white outline-none"
                   />
                   {/* Only show the remove button if there are more than 2 options */}
