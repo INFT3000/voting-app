@@ -44,7 +44,7 @@ func createQuickPollApp() *gin.Engine {
 
 	// settings
 	g.SetTrustedProxies([]string{}) // currently no proxies
-	g.RedirectTrailingSlash = false  // /health/ -> /health
+	g.RedirectTrailingSlash = false // /health/ -> /health
 	g.RedirectFixedPath = false     // tries to find the correct route. best disabled, we only expect frontend to use the correct routes.
 	g.ForwardedByClientIP = true    // X-Forwarded-For header
 	g.UseRawPath = false            // finds parameters in the raw path, not the decoded path. disabled because decoded seems safer?
@@ -69,7 +69,7 @@ func createQuickPollApp() *gin.Engine {
 			cors.New(cors.Config{
 				AllowOrigins:     []string{"*"},
 				AllowMethods:     []string{"POST", "GET", "OPTIONS", "PUT", "DELETE"},
-				AllowHeaders:     []string{"Accept, Baggage, Content-Type, Sentry-Trace, User-Agent"},
+				AllowHeaders:     []string{"Accept, Baggage, Content-Type, Sentry-Trace, User-Agent", "Authorization"},
 				ExposeHeaders:    []string{"Content-Length"},
 				AllowCredentials: true,
 				AllowOriginFunc: func(origin string) bool {
