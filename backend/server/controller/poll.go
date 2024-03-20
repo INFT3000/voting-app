@@ -7,6 +7,7 @@ import (
 
 	"github.com/INFT3000/voting-app/server/database"
 	"github.com/INFT3000/voting-app/server/database/models"
+	"github.com/INFT3000/voting-app/server/token"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
@@ -138,6 +139,56 @@ func postVote(c *gin.Context) {
 
 	session := models.VoterSession{
 		Ip: c.ClientIP(),
+	}
+
+	if token.ExtractToken(c) != "" {
+		err := token.EnsureTokenIsValid(c)
+		if err != nil {
+			c.AbortWithError(http.StatusUnauthorized, err)
+			return
+		}
+		token, err := token.ExtractTokenID(c)
+		if err != nil {
+			c.AbortWithError(http.StatusInternalServerError, err)
+			return
+		}
+		session.UserId = token
+
+		var count int64
+		database.Context.Model(&models.VoterSession{}).Where("user_id = ?", session.UserId).Count(&count)
+		if count > 0 {
+			err := &gin.Error{
+				Err:  errors.New("user already voted"),
+				Type: gin.ErrorTypePublic,
+			}
+			c.Errors = append(c.Errors, err)
+			c.AbortWithStatus(http.StatusForbidden)
+			return
+		}
+	}
+
+	if poll.PollSettings.DisallowSameIp {
+		var count int64
+		database.Context.Model(&models.VoterSession{}).Where("ip = ?", session.Ip).Count(&count)
+		if count > 0 {
+			err := &gin.Error{
+				Err:  errors.New("ip already voted"),
+				Type: gin.ErrorTypePublic,
+			}
+			c.Errors = append(c.Errors, err)
+			c.AbortWithStatus(http.StatusForbidden)
+			return
+		}
+	}
+
+	if poll.PollSettings.DisallowAnonymous && session.UserId == 0 {
+		err := &gin.Error{
+			Err:  errors.New("anonymous voting disallowed"),
+			Type: gin.ErrorTypePublic,
+		}
+		c.Errors = append(c.Errors, err)
+		c.AbortWithStatus(http.StatusForbidden)
+		return
 	}
 
 	selectedOptionId := 0
