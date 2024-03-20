@@ -57,6 +57,7 @@ func createQuickPollApp() *gin.Engine {
 			*controller.HealthController,
 			*controller.UserController,
 			*controller.PollController,
+			*controller.AuthController,
 		},
 		Middleware: []gin.HandlerFunc{
 			gin.Logger(),
