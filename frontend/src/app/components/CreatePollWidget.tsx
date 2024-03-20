@@ -145,7 +145,7 @@ export default function CreatePollWidget(): JSX.Element {
                         message: "Must be less than 255 characters long.",
                       },
                     })}
-                    onFocus={() => handleFocus(index)}
+                    // onFocus={() => handleFocus(index)}
                     onBlur={() => handleBlur(index)}
                     placeholder={`Option ${index + 1}`}
                     value={option}
