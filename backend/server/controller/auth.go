@@ -19,8 +19,8 @@ type UserAuthRequest struct {
 	Password string `json:"password" binding:"required"`
 }
 
-type SignupResponse struct {
-	Username string `json:"username"`
+type UserAuthResponse struct {
+	Token string `json:"token"`
 }
 
 func postSignup(c *gin.Context) {
@@ -32,11 +32,11 @@ func postSignup(c *gin.Context) {
 
 	var user models.User
 	result := database.Context.Where("username = ?", signup.Username).First(&user)
-	if err := result.Error; err != nil {
-		if !errors.Is(err, gorm.ErrRecordNotFound) {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to query database"})
-			return
-		}
+	if err := result.Error; err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to query database"})
+		return
+	}
+	if user.Id != 0 {
 		c.JSON(http.StatusConflict, gin.H{"error": "username already exists"})
 		return
 	}
@@ -54,7 +54,13 @@ func postSignup(c *gin.Context) {
 
 	database.Context.Create(&user)
 
-	c.JSON(http.StatusCreated, SignupResponse{Username: signup.Username})
+	token, err := token.GenerateToken(user.Id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to generate token"})
+		return
+	}
+
+	c.JSON(http.StatusCreated, UserAuthResponse{Token: token})
 }
 
 func postLogin(c *gin.Context) {
@@ -83,7 +89,7 @@ func postLogin(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"token": token})
+	c.JSON(http.StatusCreated, UserAuthResponse{Token: token})
 }
 
 var AuthController *QuickPollController = New(
