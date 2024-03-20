@@ -8,7 +8,6 @@ export const QpAxios = axios.create({
   //   timeout: 1000,
   headers: {
     Accept: "application/json",
-    Authorization: localStorage.getItem("token") ? `Bearer ${localStorage.getItem("token")}` : undefined,
   },
 });
 

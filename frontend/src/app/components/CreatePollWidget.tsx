@@ -146,7 +146,7 @@ export default function CreatePollWidget(): JSX.Element {
                       },
                     })}
                     // onFocus={() => handleFocus(index)}
-                    onBlur={() => handleBlur(index)}
+                    // onBlur={() => handleBlur(index)}
                     placeholder={`Option ${index + 1}`}
                     value={option}
                     onChange={(e) => handleOptionChange(e.target.value, index)}

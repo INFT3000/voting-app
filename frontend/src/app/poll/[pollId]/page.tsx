@@ -9,7 +9,7 @@ import { AsyncWrapper } from "@/app/components/AsyncWrapper";
 import Button from "@/app/components/Button";
 import FormContainer from "@/app/components/FormContainer";
 import Navbar from "@/app/components/Navbar";
-import useQpAxios, { QpAxios } from "@/helpers/quickpollaxios";
+import useQpAxios, { QpAxios, setToken } from "@/helpers/quickpollaxios";
 
 type Option = {
   text: string;
@@ -82,6 +82,7 @@ export default function Page({ params }: { params: { pollId: string } }): JSX.El
     }
     clearErrors("options");
     try {
+      setToken(localStorage.getItem("token")!);
       await QpAxios.post(`poll/${pollId}/vote`, {
         option: options.at(0),
       });
