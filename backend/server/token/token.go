@@ -30,7 +30,7 @@ func GenerateToken(user_id uint) (string, error) {
 
 }
 
-func AuthenticateTokenIsValid(c *gin.Context) error {
+func EnsureTokenIsValid(c *gin.Context) error {
 	tokenString := ExtractToken(c)
 	_, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
