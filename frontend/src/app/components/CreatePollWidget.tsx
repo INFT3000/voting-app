@@ -157,6 +157,7 @@ export default function CreatePollWidget(): JSX.Element {
                     <IconButton
                       theme="ghost"
                       type="button"
+                      tooltip="Remove Option"
                       icon={<RemoveIcon />}
                       onClick={() => handleOptionRemove(index)}
                       className="transition-opacity hover:opacity-45"
@@ -175,7 +176,7 @@ export default function CreatePollWidget(): JSX.Element {
               type="button"
               icon={<AddIcon />}
               onClick={handleAddOption}
-              className=" justify-center px-[3px] text-[14px] text-grey "
+              className="w-full justify-center px-[3px] text-[14px] text-grey"
             >
               Add Option
             </IconButton>

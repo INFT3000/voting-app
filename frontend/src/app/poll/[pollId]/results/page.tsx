@@ -122,6 +122,8 @@ export default function Page({ params }: { params: { pollId: string } }): JSX.El
                 <IconButton
                   theme="ghost"
                   type="button"
+                  tooltip={copySuccess ? "Copied!" : "Copy to Clipboard"}
+                  // eslint-disable-next-line jsx-control-statements/jsx-use-if-tag
                   icon={copySuccess ? <CheckCircleOutline /> : <ContentCopy />}
                   onClick={copyToClipboard}
                 />
