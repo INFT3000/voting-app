@@ -4,7 +4,9 @@ export default function Navbar(): JSX.Element {
   return (
     <nav className="fixed inset-x-0 top-0 flex items-center justify-between  sm:px-6 md:px-8 lg:px-[15vw]">
       <div className="logo p-2">
+        <a href="/">
         <Image src="/assets/logo-white.svg" alt="logo" width={142} height={142} />
+        </a>
       </div>
       <div className="links w-32 sm:block">
         <ul className="flex space-x-4">
