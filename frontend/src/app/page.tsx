@@ -7,7 +7,7 @@ import Navbar from "./components/Navbar";
 
 export default function Home(): JSX.Element {
   return (
-    <main className="flex size-[100vh] flex-col items-center justify-between gap-10 p-24 lg:flex-row lg:gap-0">
+    <main className="flex h-[100vh] w-[100vw] flex-col items-center justify-between gap-10 p-24 lg:flex-row lg:gap-0">
       <Navbar />
 
       <div className="header flex w-full flex-col items-center justify-center gap-2 lg:w-1/2 lg:items-start">
