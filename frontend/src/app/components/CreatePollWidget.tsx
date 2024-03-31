@@ -5,7 +5,7 @@ import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import { UseFormRegisterReturn, useForm } from "react-hook-form";
 import { When } from "react-if";
 
 import Button from "./Button";
@@ -56,15 +56,11 @@ export default function CreatePollWidget(): JSX.Element {
   const router = useRouter();
   const formMethods = useForm<ICreatePoll>();
   const {
-    register, setError, formState, handleSubmit,
+    register, watch, formState, handleSubmit,
   } = formMethods;
 
   const { errors } = formState;
-  const [options, setOptions] = useState(["", ""]);
 
-  const handleAddOption = (): void => {
-    setOptions([...options, ""]);
-  };
   const [focusedIndex, setFocusedIndex] = useState<Record<number, boolean>>({});
 
   const handleFocus = (index: number): void => {
@@ -75,18 +71,6 @@ export default function CreatePollWidget(): JSX.Element {
     setFocusedIndex({ ...focusedIndex, [index]: false });
   };
 
-  const handleOptionChange = (value: string, index: number): void => {
-    const newOptions = [...options];
-    newOptions[index] = value;
-    setOptions(newOptions);
-  };
-
-  const handleOptionRemove = (index: number): void => {
-    const newOptions = [...options];
-    newOptions.splice(index, 1);
-    setOptions(newOptions);
-  };
-
   const onSubmit = async (payload: ICreatePoll): Promise<void> => {
     const response = await QpAxios.post<{ response: { uuid: string } }>("poll/", payload);
     if (response.status === 201) {
@@ -95,8 +79,34 @@ export default function CreatePollWidget(): JSX.Element {
     }
   };
 
+  const options = watch("options", ["", ""]);
+
+  const createRegistration = (index: number, onFocus: (index: number) => void, onBlur: (index: number) => void): UseFormRegisterReturn<`options.${number}`> => {
+    const registration = register(`options.${index}`, {
+      required: "Required",
+      maxLength: {
+        value: 255,
+        message: "Must be less than 255 characters long.",
+      },
+    });
+
+    // const managedOnFocus = registration.onFocus;
+    // registration.onFocus = () => {
+    //   managedOnFocus();
+    //   onFocus(index);
+    // }
+
+    const managedOnBlur = registration.onBlur;
+    registration.onBlur = async (e) => {
+      await managedOnBlur(e);
+      onBlur(index);
+    };
+
+    return registration;
+  };
+
   return (
-    <FormContainer className="">
+    <FormContainer>
       <form className="w-[100%]" onSubmit={handleSubmit(onSubmit)}>
         <div className="inputGroup flex flex-col">
           <label htmlFor="title" className="mb-[5px] font-medium text-white">Title</label>
@@ -138,18 +148,9 @@ export default function CreatePollWidget(): JSX.Element {
                 >
                   <input
                     type="text"
-                    {...register(`options.${index}`, {
-                      required: "Required",
-                      maxLength: {
-                        value: 255,
-                        message: "Must be less than 255 characters long.",
-                      },
-                    })}
-                    // onFocus={() => handleFocus(index)}
-                    // onBlur={() => handleBlur(index)}
+                    {...createRegistration(index, handleFocus, handleBlur)}
                     placeholder={`Option ${index + 1}`}
                     value={option}
-                    onChange={(e) => handleOptionChange(e.target.value, index)}
                     className="w-full grow border-none bg-tetraDark text-white outline-none"
                   />
                   {/* Only show the remove button if there are more than 2 options */}
@@ -158,7 +159,7 @@ export default function CreatePollWidget(): JSX.Element {
                       theme="ghost"
                       type="button"
                       icon={<RemoveIcon />}
-                      onClick={() => handleOptionRemove(index)}
+                      // onClick={() => handleOptionRemove(index)}
                       className="transition-opacity hover:opacity-45"
                     />
                   </When>
@@ -174,7 +175,7 @@ export default function CreatePollWidget(): JSX.Element {
               theme="secondary"
               type="button"
               icon={<AddIcon />}
-              onClick={handleAddOption}
+              // onClick={handleAddOption}
               className=" justify-center px-[3px] text-[14px] text-grey "
             >
               Add Option
