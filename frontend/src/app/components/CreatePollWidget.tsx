@@ -4,7 +4,7 @@ import { ErrorMessage } from "@hookform/error-message";
 import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { UseFormRegisterReturn, useForm } from "react-hook-form";
 import { When } from "react-if";
 
@@ -13,6 +13,10 @@ import FormContainer from "./FormContainer";
 import IconButton from "./IconButton";
 import ToggleSwitch from "./ToggleSwitch";
 import { QpAxios } from "@/helpers/quickpollaxios";
+
+type RegistrationAndFocus = UseFormRegisterReturn<`options.${number}`> & {
+  onFocus: () => void;
+};
 
 interface ICreatePoll {
   title: string;
@@ -80,8 +84,9 @@ export default function CreatePollWidget(): JSX.Element {
   };
 
   const options = watch("options", ["", ""]);
+  const [, setForceRender] = useState<object>(); // options is not reactive, so when we change it, we need to force re-render. blame chance
 
-  const createRegistration = (index: number, onFocus: (index: number) => void, onBlur: (index: number) => void): UseFormRegisterReturn<`options.${number}`> => {
+  const createRegistration = (index: number, onFocus: () => void, onBlur: (index: number) => void): RegistrationAndFocus => {
     const registration = register(`options.${index}`, {
       required: "Required",
       maxLength: {
@@ -90,19 +95,16 @@ export default function CreatePollWidget(): JSX.Element {
       },
     });
 
-    // const managedOnFocus = registration.onFocus;
-    // registration.onFocus = () => {
-    //   managedOnFocus();
-    //   onFocus(index);
-    // }
-
     const managedOnBlur = registration.onBlur;
     registration.onBlur = async (e) => {
       await managedOnBlur(e);
       onBlur(index);
     };
 
-    return registration;
+    return {
+      ...registration,
+      onFocus: () => onFocus(),
+    };
   };
 
   return (
@@ -144,11 +146,11 @@ export default function CreatePollWidget(): JSX.Element {
                 className="mb-[5px] flex flex-col"
               >
                 <div
-                  className={`mb-[5px] flex h-[40px] items-center rounded-lg bg-tetraDark p-[10px] ${focusedIndex[index] ? "border-[1px] border-primaryBlue" : ""}`}
+                  className={`mb-[5px] flex h-[40px] items-center rounded-lg border-[1px] bg-tetraDark p-[10px] ${focusedIndex[index] ? "border-primaryBlue" : "border-transparent"}`}
                 >
                   <input
                     type="text"
-                    {...createRegistration(index, handleFocus, handleBlur)}
+                    {...createRegistration(index, () => handleFocus(index), handleBlur)}
                     placeholder={`Option ${index + 1}`}
                     value={option}
                     className="w-full grow border-none bg-tetraDark text-white outline-none"
@@ -159,7 +161,10 @@ export default function CreatePollWidget(): JSX.Element {
                       theme="ghost"
                       type="button"
                       icon={<RemoveIcon />}
-                      // onClick={() => handleOptionRemove(index)}
+                      onClick={() => {
+                        options.splice(index, 1);
+                        setForceRender({});
+                      }}
                       className="transition-opacity hover:opacity-45"
                     />
                   </When>
@@ -175,7 +180,10 @@ export default function CreatePollWidget(): JSX.Element {
               theme="secondary"
               type="button"
               icon={<AddIcon />}
-              // onClick={handleAddOption}
+              onClick={() => {
+                options.push("");
+                setForceRender({});
+              }}
               className=" justify-center px-[3px] text-[14px] text-grey "
             >
               Add Option
