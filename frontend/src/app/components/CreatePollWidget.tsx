@@ -84,7 +84,13 @@ export default function CreatePollWidget(): JSX.Element {
   };
 
   const options = watch("options", ["", ""]);
-  const [, setForceRender] = useState<object>(); // options is not reactive, so when we change it, we need to force re-render. blame chance
+
+  // We use this to force the page to rerender when the options array changes.
+  // Options isn't reactive otherwise.
+  const [, setForceRender] = useState<object>();
+  useEffect(() => {
+    setForceRender({});
+  }, [options]);
 
   const createRegistration = (index: number, onFocus: () => void, onBlur: (index: number) => void): RegistrationAndFocus => {
     const registration = register(`options.${index}`, {
@@ -156,13 +162,15 @@ export default function CreatePollWidget(): JSX.Element {
                     className="w-full grow border-none bg-tetraDark text-white outline-none"
                   />
                   {/* Only show the remove button if there are more than 2 options */}
-                  <When condition={index > 1}>
+                  <When condition={options.length > 2}>
                     <IconButton
                       theme="ghost"
                       type="button"
                       icon={<RemoveIcon />}
                       onClick={() => {
+                        if (options.length === 2) return;
                         options.splice(index, 1);
+                        // not redundant
                         setForceRender({});
                       }}
                       className="transition-opacity hover:opacity-45"
@@ -182,6 +190,8 @@ export default function CreatePollWidget(): JSX.Element {
               icon={<AddIcon />}
               onClick={() => {
                 options.push("");
+                // double rerender is very sad. but also, without this,
+                // the button doesn't work until page has been interacted with.
                 setForceRender({});
               }}
               className=" justify-center px-[3px] text-[14px] text-grey "
