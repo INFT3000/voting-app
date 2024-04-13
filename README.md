@@ -31,3 +31,18 @@ QuickPoll is a simple voting app that allows users to create and vote on polls.
   go run main.go
   ```
 
+  ### Docker
+
+  ```bash
+  cd voting-app
+  make infra
+  ```
+
+  ## Contributing
+
+  - Probably just donut do it 
+
+  ## License
+
+  Pas de License
+
