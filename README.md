@@ -4,7 +4,8 @@ QuickPoll is a simple voting app that allows users to create and vote on polls.
 
 
 
-https://github.com/INFT3000/voting-app/assets/113129413/86752f20-cf40-4ee8-9c44-e6ddbde20363
+![Screen Recording 2024-04-14 at 7 17 31 PM](https://github.com/INFT3000/voting-app/assets/113129413/0ff6784a-f12b-46be-a709-c84ae547399a)
+
 
 
 
