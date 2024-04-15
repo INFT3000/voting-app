@@ -21,9 +21,9 @@ QuickPoll offers a range of intuitive features to streamline your polling experi
 
 QuickPoll harnesses cutting-edge technologies to deliver a seamless user experience:
 
-**Frontend:**NextJS<br>
-**Backend:**Go<br>
-**Database:**MySQL<br>
+**Frontend**:NextJS<br>
+**Backend**:Go<br>
+**Database**:MySQL<br>
 
 ## Packages
 
