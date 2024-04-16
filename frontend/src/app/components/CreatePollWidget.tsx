@@ -4,15 +4,19 @@ import { ErrorMessage } from "@hookform/error-message";
 import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import React, { useEffect, useState } from "react";
+import { UseFormRegisterReturn, useForm } from "react-hook-form";
 import { When } from "react-if";
 
 import Button from "./Button";
+import FormContainer from "./FormContainer";
 import IconButton from "./IconButton";
-import PollContainer from "./PollContainer";
 import ToggleSwitch from "./ToggleSwitch";
 import { QpAxios } from "@/helpers/quickpollaxios";
+
+type RegistrationAndFocus = UseFormRegisterReturn<`options.${number}`> & {
+  onFocus: () => void;
+};
 
 interface ICreatePoll {
   title: string;
@@ -56,15 +60,11 @@ export default function CreatePollWidget(): JSX.Element {
   const router = useRouter();
   const formMethods = useForm<ICreatePoll>();
   const {
-    register, setError, formState, handleSubmit,
+    register, watch, formState, handleSubmit,
   } = formMethods;
 
   const { errors } = formState;
-  const [options, setOptions] = useState(["", ""]);
 
-  const handleAddOption = (): void => {
-    setOptions([...options, ""]);
-  };
   const [focusedIndex, setFocusedIndex] = useState<Record<number, boolean>>({});
 
   const handleFocus = (index: number): void => {
@@ -75,18 +75,6 @@ export default function CreatePollWidget(): JSX.Element {
     setFocusedIndex({ ...focusedIndex, [index]: false });
   };
 
-  const handleOptionChange = (value: string, index: number): void => {
-    const newOptions = [...options];
-    newOptions[index] = value;
-    setOptions(newOptions);
-  };
-
-  const handleOptionRemove = (index: number): void => {
-    const newOptions = [...options];
-    newOptions.splice(index, 1);
-    setOptions(newOptions);
-  };
-
   const onSubmit = async (payload: ICreatePoll): Promise<void> => {
     const response = await QpAxios.post<{ response: { uuid: string } }>("poll/", payload);
     if (response.status === 201) {
@@ -95,8 +83,38 @@ export default function CreatePollWidget(): JSX.Element {
     }
   };
 
+  const options = watch("options", ["", ""]);
+
+  // We use this to force the page to rerender when the options array changes.
+  // Options isn't reactive otherwise.
+  const [, setForceRender] = useState<object>();
+  useEffect(() => {
+    setForceRender({});
+  }, [options]);
+
+  const createRegistration = (index: number, onFocus: () => void, onBlur: (index: number) => void): RegistrationAndFocus => {
+    const registration = register(`options.${index}`, {
+      required: "Required",
+      maxLength: {
+        value: 255,
+        message: "Must be less than 255 characters long.",
+      },
+    });
+
+    const managedOnBlur = registration.onBlur;
+    registration.onBlur = async (e) => {
+      await managedOnBlur(e);
+      onBlur(index);
+    };
+
+    return {
+      ...registration,
+      onFocus: () => onFocus(),
+    };
+  };
+
   return (
-    <PollContainer>
+    <FormContainer className="">
       <form className="w-[100%]" onSubmit={handleSubmit(onSubmit)}>
         <div className="inputGroup flex flex-col">
           <label htmlFor="title" className="mb-[5px] font-medium text-white">Title</label>
@@ -134,31 +152,27 @@ export default function CreatePollWidget(): JSX.Element {
                 className="mb-[5px] flex flex-col"
               >
                 <div
-                  className={`mb-[5px] flex h-[40px] items-center rounded-lg bg-tetraDark p-[10px] ${focusedIndex[index] ? "border-[1px] border-primaryBlue" : ""}`}
+                  className={`mb-[5px] flex h-[40px] items-center rounded-lg border-[1px] bg-tetraDark p-[10px] ${focusedIndex[index] ? "border-primaryBlue" : "border-transparent"}`}
                 >
                   <input
                     type="text"
-                    {...register(`options.${index}`, {
-                      required: "Required",
-                      maxLength: {
-                        value: 255,
-                        message: "Must be less than 255 characters long.",
-                      },
-                    })}
-                    onFocus={() => handleFocus(index)}
-                    onBlur={() => handleBlur(index)}
+                    {...createRegistration(index, () => handleFocus(index), handleBlur)}
                     placeholder={`Option ${index + 1}`}
                     value={option}
-                    onChange={(e) => handleOptionChange(e.target.value, index)}
                     className="w-full grow border-none bg-tetraDark text-white outline-none"
                   />
                   {/* Only show the remove button if there are more than 2 options */}
-                  <When condition={index > 1}>
+                  <When condition={options.length > 2}>
                     <IconButton
                       theme="ghost"
                       type="button"
                       icon={<RemoveIcon />}
-                      onClick={() => handleOptionRemove(index)}
+                      onClick={() => {
+                        if (options.length === 2) return;
+                        options.splice(index, 1);
+                        // not redundant
+                        setForceRender({});
+                      }}
                       className="transition-opacity hover:opacity-45"
                     />
                   </When>
@@ -174,7 +188,12 @@ export default function CreatePollWidget(): JSX.Element {
               theme="secondary"
               type="button"
               icon={<AddIcon />}
-              onClick={handleAddOption}
+              onClick={() => {
+                options.push("");
+                // double rerender is very sad. but also, without this,
+                // the button doesn't work until page has been interacted with.
+                setForceRender({});
+              }}
               className=" justify-center px-[3px] text-[14px] text-grey "
             >
               Add Option
@@ -202,6 +221,6 @@ export default function CreatePollWidget(): JSX.Element {
         </div>
         <Button theme="primary" type="submit" className="mt-[10px] w-[100%]">Create Poll</Button>
       </form>
-    </PollContainer>
+    </FormContainer>
   );
 }
