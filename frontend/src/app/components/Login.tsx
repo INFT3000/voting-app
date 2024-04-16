@@ -20,6 +20,7 @@ interface ILogin {
 }
 
 export default function Login({ className }): JSX.Element {
+  const router = useRouter();
   const formMethods = useForm<ILogin>();
   const {
     register, formState, handleSubmit, setError,
@@ -36,8 +37,8 @@ export default function Login({ className }): JSX.Element {
     if (response.status === 201) {
       const { token } = response.data;
       setToken(token);
-      return;
-      // await router.push(`/profile, or something.`);
+      // redirect back to the home page
+      router.push("/");
     }
     setError("username", {
       type: "manual",

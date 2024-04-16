@@ -40,7 +40,7 @@ export default function Signup({ className }): JSX.Element {
       username: data.username,
       password: data.password,
     };
-    const response = await QpAxios.post<{ token: string }>("auth/signp", payload);
+    const response = await QpAxios.post<{ token: string }>("auth/signup", payload);
     if (response.status === 201) {
       const { token } = response.data;
       setToken(token);
